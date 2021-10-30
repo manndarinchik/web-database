@@ -1,10 +1,12 @@
 from django.db import models
 
+# Create your models here.
 
-class Table(models.Model):
-    name = models.CharField('Имя и Фамилия', max_length = 100)
-    date = models.DateTimeField('Дата рождения')
-    cost = models.CharField('Цена', max_length=100)
-
+class DataNode(models.Model):
     def __str__(self):
-        return self.name
+        # отображение нода в консоли и утилитах  
+        return "At {}:{} - {}".format(self.row_pos, self.column_pos, self.data)
+
+    data = models.CharField(max_length=200)
+    row_pos = models.IntegerField(default=0)
+    column_pos = models.IntegerField(default=0)

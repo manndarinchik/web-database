@@ -24,26 +24,15 @@
                 </div>
                 <h1 class="main__title">Таблица</h1>
                 <div class="main__table">
-                    <table>
-                        <tr>
-                            <td class="table__header">ФИО</td>
-                            <td class="table__header">Дата рождения</td>
-                            <td class="table__header">Цена</td>
-                        </tr>
-                        
-                    {% for elem in table %}
-                        <tr>
-                            <td>
-                                {{ elem.name }}
-                            </td>
-                            <td>
-                                {{ elem.date }}
-                            </td>
-                            <td>
-                                {{ elem.cost }}
-                            </td>
-                        </tr>
-                        
+                    <table>                        
+                    {% for i in table %}
+                    <tr>
+                        {% for j in i %}
+                        <td>
+                            {{ j }}
+                        </td>
+                        {% endfor %}
+                    </tr>
                     {% endfor %}
                     </table>
                 </div>
