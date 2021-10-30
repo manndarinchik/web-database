@@ -6,10 +6,49 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="{% static database_app/css/main.css %}">
+    <link rel="stylesheet" href="{% static 'database_app/css/main.css' %}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
     <title>Таблица</title>
 </head>
 <body>
-    
+    <div class="wrapper">
+        <div class="content">
+            <aside class="menu"></aside>
+            <section class="main">
+                <div class="main__button">
+                    <div class="button__stick"></div>
+                    <div class="button__stick"></div>
+                    <div class="button__stick"></div>
+                </div>
+                <h1 class="main__title">Таблица</h1>
+                <div class="main__table">
+                    <table>
+                        <tr>
+                            <td class="table__header">ФИО</td>
+                            <td class="table__header">Дата рождения</td>
+                            <td class="table__header">Цена</td>
+                        </tr>
+                        
+                    {% for elem in table %}
+                        <tr>
+                            <td>
+                                {{ elem.name }}
+                            </td>
+                            <td>
+                                {{ elem.date }}
+                            </td>
+                            <td>
+                                {{ elem.cost }}
+                            </td>
+                        </tr>
+                        
+                    {% endfor %}
+                    </table>
+                </div>
+            </section>
+        </div>
+    </div>
 </body>
 </html>
