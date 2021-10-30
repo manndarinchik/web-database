@@ -50,7 +50,7 @@ body {
 
 .content {
 	padding: 0 15px;
-	min-width: 335px;
+	max-width: 335px;
 	width: 100%;
 	position: relative;
 }

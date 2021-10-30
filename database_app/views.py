@@ -4,7 +4,7 @@ from .models import Table
 
 def index(request):
 
-    table = Table.objects.all()
+    table = Table.objects.order_by("name")
 
 
 

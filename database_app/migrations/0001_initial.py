@@ -16,7 +16,7 @@ class Migration(migrations.Migration):
             fields=[
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('name', models.CharField(max_length=100, verbose_name='Имя и Фамилия')),
-                ('date', models.DateTimeField(verbose_name='Дата рождения')),
+                ('date', models.DateField(verbose_name='Дата рождения')),
                 ('cost', models.CharField(max_length=100, verbose_name='Цена')),
             ],
         ),
