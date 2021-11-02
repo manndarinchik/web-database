@@ -6,7 +6,7 @@ from django.db.models.fields.reverse_related import ManyToManyRel, ManyToOneRel
 class DataNode(models.Model):
     def __str__(self):
         # отображение нода в консоли и утилитах  
-        return "At {}:{} - {}".format(self.row_pos, self.column_pos, self.data)
+        return f"At {self.row_pos}:{self.column_pos} - {self.data}"
 
     data = models.CharField(max_length=200, default="data")
     row_pos = models.IntegerField(default=0)
