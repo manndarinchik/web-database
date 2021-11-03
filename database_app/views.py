@@ -27,10 +27,7 @@ def home(request):
 
     for i in range(data_h):
         data[i] = [0] * data_w
-
-    print(data)
     # Заполнить таблицу ячейками
-    
 
     for entry in nodes:
 

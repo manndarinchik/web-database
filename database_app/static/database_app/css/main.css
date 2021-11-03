@@ -101,8 +101,6 @@ body {
 
 .table {
 	display: block;
-	
-
 }
 
 td.table__header {
@@ -110,14 +108,18 @@ td.table__header {
 	font-size: 20px;
 	font-weight: 800;
 }
+tr {
+	height: 30px;
+}
 
 td {
 	height: 30px;
+	min-width: 100px;
 }
 
 tr:nth-child(even) {
 	background-color: #ccc;
-}
+}	
 
 td:nth-child(1) {
 	min-width: 150px;
@@ -129,8 +131,33 @@ td:nth-child(2) {
 	min-width: 150px;
 }
 
-td:nth-child(3) {
-	min-width: 100px;
-	padding-left: 10px;
+.buttonRow {
+	margin-top: 5px;
+	width: 20px;
+	height: 20px;
+	background-color: red;
+	border-radius: 5px;
+	display: none;
 }
 
+td.buttonColumn {
+	margin-top: 5px;
+	display: block !important;
+	min-width: 20px !important;
+	height: 20px;
+	background-color: red;
+	border-radius: 5px;
+}	
+
+.button_change {
+	width: 20px;
+	height: 20px;
+	background-color: red;
+}
+
+input {
+	border: 1px solid #000;
+	border-radius: 5px;
+	height: 100%;
+	background-color: rgba(0, 0, 0, 0);
+}
