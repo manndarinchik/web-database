@@ -53,7 +53,7 @@ buttonChange.addEventListener('click', function() {
             let allTd = allTr[i].querySelectorAll('td');
             for (let j = 0; j < allTd.length; j++) {
                 let tdText = String(allTd[j].innerHTML).trim();
-                if (tdText != '' && allTd[j].className != 'buttonRow') {
+                if (allTd[j].className != 'buttonColumn') {
                     allTd[j].innerHTML = '';
                     let tempInput = document.createElement('input');
                     tempInput.value = tdText;
