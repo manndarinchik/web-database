@@ -29,10 +29,6 @@ def home(request):
 
     # Заполнить таблицу ячейками
 
-
-
-    # Заполнить таблицу ячейками
-
     for entry in nodes:
         data[entry.row_pos][entry.column_pos] = entry.data
 
