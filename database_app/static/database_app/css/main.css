@@ -161,3 +161,14 @@ input {
 	height: 100%;
 	background-color: rgba(0, 0, 0, 0);
 }
+
+.justButton {
+    width: 100px;
+	height: 40px;
+	background-color: red;
+    border-radius: 10px;
+}
+
+.agent {
+    display: none;
+}

@@ -5,16 +5,20 @@ buttonColumn.classList.add("buttonColumn");
 buttonColumn.style.visibility = 'hidden';
 allTr[0].append(buttonColumn);
 /*-------------------------------------*/
+const agent = document.querySelector('.agent');
+agent.setAttribute('value', allTr[0].querySelectorAll('td').length - 1);
 
 buttonColumn.addEventListener('click', function() {
     let allTr = document.querySelectorAll("tr");
     for (let i = 0; i < allTr.length; i++) {
         let newTd = document.createElement('td');
         let input = document.createElement('input');
+        input.setAttribute('name', 'ourInput');
         newTd.append(input);
         if (i == 0) {
             let allTd = allTr[i].querySelectorAll('td');
             allTd[allTd.length - 2].after(newTd);
+            agent.setAttribute('value', allTr[0].querySelectorAll('td').length - 1);
         } else {
             allTr[i].append(newTd);
         }
@@ -31,6 +35,7 @@ buttonRow.addEventListener('click', function() {
     for (let i = 0; i < lastTr.querySelectorAll('td').length; i++) {
         let newTd = document.createElement('td');
         let input = document.createElement('input');
+        input.setAttribute('name', 'ourInput');
         newTd.append(input);
         newTr.append(newTd);
     }
@@ -56,6 +61,7 @@ buttonChange.addEventListener('click', function() {
                 if (allTd[j].className != 'buttonColumn') {
                     allTd[j].innerHTML = '';
                     let tempInput = document.createElement('input');
+                    tempInput.setAttribute('name', 'ourInput');
                     tempInput.value = tdText;
                     allTd[j].append(tempInput);
                 }
@@ -80,4 +86,24 @@ buttonChange.addEventListener('click', function() {
     }
 });
 
+let butt = document.querySelector('.justButton');
 
+
+butt.addEventListener('submit', function(e) {
+    e.preventDefault();
+    
+    //let csrf = document.getElementsByName('csrfmiddlewaretoken')[0].value;
+    const newForm = new FormData();
+    
+    let row = agent.value;
+
+    newForm.append(row)
+
+    
+    const xhr = new XMLHttpRequest();
+
+    xhr.open('POST', '');
+    xhr.send(newForm);
+
+    
+})

@@ -23,25 +23,28 @@
                     <div class="button__stick"></div>
                 </div>
                 <h1 class="main__title">Таблица</h1>
+                <form action="" method="post" name="ourForm">
                 <div class="main__table">
+                    
+                    {% csrf_token %}
                     <table>                        
-                    {% for i in table %}
-                    <tr>
-                        {% for j in i %}
-                        <td>
-                            {{ j }}
-                        </td>
-                        
+                        {% for i in table %}
+                            <tr>
+                                {% for j in i %}
+                                   <td>
+                                        {{ j }}
+                                    </td>
+                                {% endfor %} 
+                            </tr>
                         {% endfor %}
-                        
-                        
-                    </tr>
-                    {% endfor %}
-
                     </table>
+                    
                     <div class="buttonRow"></div>
                     <div class="button_change"></div>
                 </div>
+                <input type="text" class='agent' name="agent">
+                <button class="justButton"></button>
+                </form>
             </section>
         </div>
     </div>

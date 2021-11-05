@@ -1,15 +1,14 @@
-from django.shortcuts import render
-from django.http import HttpResponse
-from django.template import loader
-
+from django.shortcuts import render, redirect
+from django.http import HttpResponse, QueryDict
 from .models import DataNode, DataTable
+from .forms import DataNodeForm
+
 
 # Create your views here.
 
 def home(request):
-    table = DataTable.objects.get()
-    nodes = table.nodes.all()
-    template = loader.get_template('database_app/index.html')
+    nodes = DataNode.objects.all()
+    #nodes = table.nodes.all()
 
     # Найти границы таблицы
     data_w = 0
@@ -24,6 +23,7 @@ def home(request):
     data_w += 1
     data_h += 1
     data = [0] * data_h
+
     for i in range(data_h):
         data[i] = [0] * data_w
 
@@ -34,12 +34,35 @@ def home(request):
 
     context = {
         "table": data,
-        "table_name": table.name,
-        "table_id": table.id
+        #"table_name": table.name,
+        #"table_id": table.id
     }
 
-    return HttpResponse(template.render(context, request))
+    # Приём данных
 
+    if request.method == 'POST':
+        row = 0
+        col = 0
+        max_col = int(request.POST['agent'])
+
+
+
+        for elem in request.POST['ourInput']:
+
+            #DataNode(row_pos = row, column_pos = col, data = elem).save()
+            col += 1
+            if (col == max_col - 1):
+                col = 0
+                row += 1
+
+
+        return redirect('index')
+
+    return render(request, 'database_app/index.html', context)
+
+
+
+'''
 def recieve_table(req, data, table_id):
     # Принимаемые данные - двумерный массив строк.
 
@@ -81,5 +104,6 @@ def recieve_table(req, data, table_id):
 
     # Сохранить изменения в таблице
     table.save()
+'''
+#    return HttpResponse('')
 
-    return HttpResponse('')
