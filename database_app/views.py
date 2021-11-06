@@ -1,7 +1,6 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse, QueryDict
 from .models import DataNode, DataTable
-from .forms import DataNodeForm
 
 
 # Create your views here.
@@ -45,16 +44,18 @@ def home(request):
         col = 0
         max_col = int(request.POST['agent'])
 
+        values = request.POST.getlist('ourInput')
+        
 
+        for elem in values:
 
-        for elem in request.POST['ourInput']:
+            DataNode.objects.get_or_create(row_pos=str(row), column_pos=str(col), data=elem)
 
-            #DataNode(row_pos = row, column_pos = col, data = elem).save()
-            col += 1
             if (col == max_col - 1):
                 col = 0
                 row += 1
-
+                continue
+            col += 1
 
         return redirect('index')
 
@@ -62,7 +63,7 @@ def home(request):
 
 
 
-'''
+
 def recieve_table(req, data, table_id):
     # Принимаемые данные - двумерный массив строк.
 
@@ -104,6 +105,6 @@ def recieve_table(req, data, table_id):
 
     # Сохранить изменения в таблице
     table.save()
-'''
-#    return HttpResponse('')
+
+    return HttpResponse('')
 
