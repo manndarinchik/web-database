@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from django.http import HttpResponse, QueryDict
+from django.http import HttpResponse
 from .models import DataNode, DataTable
 
 
@@ -45,11 +45,21 @@ def home(request):
         max_col = int(request.POST['agent'])
 
         values = request.POST.getlist('ourInput')
-        
+
 
         for elem in values:
 
-            DataNode.objects.get_or_create(row_pos=str(row), column_pos=str(col), data=elem)
+            try:
+
+                DataNode.objects.get(row_pos=str(row), column_pos=str(col))
+                obj = DataNode.objects.get(row_pos=str(row), column_pos=str(col))
+                obj.data = elem
+                obj.save()
+            except:
+                DataNode.objects.create(row_pos=str(row), column_pos=str(col), data=elem)
+
+
+
 
             if (col == max_col - 1):
                 col = 0
