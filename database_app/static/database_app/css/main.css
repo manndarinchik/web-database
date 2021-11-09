@@ -35,100 +35,10 @@ a, a:visited{text-decoration: none;}
 a:hover{text-decoration: none;}
 ul li{list-style: none;}
 img{vertical-align: top;}
-
-h1,h2,h3,h4,h5,h6{font-size:inherit;font-weight: 400;}
 /*--------------------*/
 
-body {
-	font-family: "Roboto", sans-serif;
-}
-
-.wrapper {
-	min-height: 100%;
-	
-}
-
-.content {
-	padding: 0 15px;
-	max-width: 335px;
-	width: 100%;
-	position: relative;
-}
-
-.menu {
-	display: none;
-}
-
-.main__button {
-	position: absolute;
-	top: 0;
-	left: 5px;
-	margin-top: 3px;
-	width: 30px;
-	height: 25px;
-	
-	border-radius: 5px;
-	
-}
-
-.button__stick {
-	height: 5px;
-	width: 25px;
-	margin: 3px 0;
-	background-color: #000;
-}
-
-.main__title {
-	font-size: 14px;
-	font-weight: 400;
-	height: 28px;
-	width: 100%;
-	display: flex;
-	justify-content: center;
-	align-items: center;
-	margin-bottom: 10px;
-}
-
-.main__table {
-	max-width: 302px;
-	width: 100%;
-	height: 494px;
-	border: 1px solid #000;
-	overflow: scroll;
-	margin: 0 auto;
-	padding: 5px;
-}
-
-.table {
-	display: block;
-}
-
-td.table__header {
-	
-	font-size: 20px;
-	font-weight: 800;
-}
-tr {
-	height: 30px;
-}
-
-td {
-	height: 30px;
-	min-width: 100px;
-}
-
-tr:nth-child(even) {
-	background-color: #ccc;
-}	
-
-td:nth-child(1) {
-	min-width: 150px;
-	padding-left: 10px;
-	padding-right: -2px;
-}
-
-td:nth-child(2) {
-	min-width: 150px;
+.table_head{
+	background-color: #dee2e6;
 }
 
 .buttonRow {

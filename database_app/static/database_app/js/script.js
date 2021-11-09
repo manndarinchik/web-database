@@ -27,7 +27,7 @@ buttonColumn.addEventListener('click', function() {
 });
 
 
-const buttonRow = document.querySelector('.buttonRow');
+const buttonRow = document.getElementById('buttonRow');
 buttonRow.addEventListener('click', function() {
     let newTr = document.createElement('tr');
     let lastTr = document.querySelectorAll('tr')[document.querySelectorAll('tr').length - 1];
@@ -45,10 +45,24 @@ buttonColumn.addEventListener('click', function() {
 
 })
 
-const buttonChange = document.querySelector(".button_change");
+const buttonChange = document.getElementById("button_change");
+const buttonCancel = document.getElementById("button_cancel");
 let access = 0;
 
+buttonCancel.addEventListener('click', function(){
+    buttonChange.style.display = "inline-block";
+    buttonCancel.style.display = "none";
+    buttonRow.style.display = "none";
+    butt.style.display = "none";
+
+})
+
 buttonChange.addEventListener('click', function() {
+    buttonRow.style.display = "inline-block";
+    buttonChange.style.display = "none";
+    buttonCancel.style.display = "inline-block";
+    butt.style.display = "inline-block";
+
     if (access % 2 == 0) {
         access += 1;
         buttonColumn.style.visibility = 'visible';
@@ -76,7 +90,7 @@ buttonChange.addEventListener('click', function() {
         for (let i = 0; i < allTr.length; i++) {
             let allTd = allTr[i].querySelectorAll('td');
             for (let j = 0; j < allTd.length; j++) {
-                if (allTd[j].className != 'buttonColumn') {
+                if (allTd[j].id != 'buttonColumn') {
                     let tdText = String(allTd[j].childNodes[0].value).trim();
                     allTd[j].childNodes[0].remove();
                     allTd[j].innerHTML = tdText;
@@ -86,7 +100,7 @@ buttonChange.addEventListener('click', function() {
     }
 });
 
-let butt = document.querySelector('.justButton');
+let butt = document.getElementById('justButton');
 
 
 butt.addEventListener('submit', function(e) {
