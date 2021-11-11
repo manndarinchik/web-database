@@ -1,53 +1,60 @@
 {% load static %}
-
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ru">
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <link rel="stylesheet" href="{% static 'database_app/css/menu.css' %}">
+
     <link rel="stylesheet" href="{% static 'database_app/css/main.css' %}">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
     <title>Таблица</title>
 </head>
 <body>
-    <div class="wrapper">
-        <div class="content">
-            <aside class="menu"></aside>
-            <section class="main">
-                <div class="main__button">
-                    <div class="button__stick"></div>
-                    <div class="button__stick"></div>
-                    <div class="button__stick"></div>
-                </div>
-                <h1 class="main__title">Таблица</h1>
-                <form action="" method="post" name="ourForm">
+<div class="wrapper">
+    <div class="content">
+        <ul id="slide-out" class="sidenav">
+            <div class="center-align"><a href="#" class="waves-effect waves-light btn">Авторизация</a></div>
+            <div class="center-align"><a href="#" class="waves-effect waves-light btn">Все таблицы</a></div>
+            <div class="center-align sidenav-close"><a class="waves-effect waves-light btn">Закрыть меню</a></div>
+        </ul>
+        <a href="#" data-target="slide-out" class="sidenav-trigger"><i class="material-icons">menu</i></a>
+        <section class="main">
+            <h1 class="main__title">Таблица</h1>
+            <form action="" method="post" name="ourForm">
                 <div class="main__table">
-                    
+
                     {% csrf_token %}
-                    <table>                        
+                    <table>
                         {% for i in table %}
-                            <tr>
-                                {% for j in i %}
-                                   <td>
-                                        {{ j }}
-                                    </td>
-                                {% endfor %} 
-                            </tr>
+                        <tr>
+                            {% for j in i %}
+                            <td>
+                                {{ j }}
+                            </td>
+                            {% endfor %}
+                        </tr>
                         {% endfor %}
                     </table>
-                    
+
                     <div class="buttonRow"></div>
                     <div class="button_change"></div>
                 </div>
                 <input type="text" class='agent' name="agent">
                 <button class="justButton"></button>
-                </form>
-            </section>
-        </div>
+            </form>
+        </section>
     </div>
-    <script src="{% static 'database_app/js/script.js' %}"></script>
+</div>
+
+<script src="{% static 'database_app/js/script.js' %}"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+<script src="{% static 'database_app/js/menu.js' %}"></script>
 </body>
 </html>
