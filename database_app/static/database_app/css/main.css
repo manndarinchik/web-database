@@ -87,6 +87,7 @@ body {
 	justify-content: center;
 	align-items: center;
 	margin-bottom: 10px;
+	margin-top: -30px;
 }
 
 .main__table {
@@ -104,7 +105,6 @@ body {
 }
 
 td.table__header {
-	
 	font-size: 20px;
 	font-weight: 800;
 }
@@ -147,6 +147,7 @@ td.buttonColumn {
 	height: 20px;
 	background-color: red;
 	border-radius: 5px;
+	content: "Добавить столбец";
 }	
 
 .button_change {
@@ -172,3 +173,24 @@ input {
 .agent {
     display: none;
 }
+
+
+
+.btn{
+    background: red;
+    color:black;
+    margin: 15px 0px;
+
+}
+.btn:hover, .btn:focus{
+    background: white;
+}
+
+.sidenav-trigger{
+    color: black;
+}
+
+.sidenav{
+    width: 200px;
+}
+
