@@ -1,10 +1,13 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from .models import DataNode, DataTable
+from .forms import SignUpForm
+from django.contrib.auth.models import User
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth import authenticate, login
 
 
-# Create your views here.
-
+@login_required
 def home(request):
     nodes = DataNode.objects.all()
     #nodes = table.nodes.all()
@@ -33,6 +36,7 @@ def home(request):
 
     context = {
         "table": data,
+        "user": request.user
         #"table_name": table.name,
         #"table_id": table.id
     }
@@ -46,20 +50,14 @@ def home(request):
 
         values = request.POST.getlist('ourInput')
 
-
         for elem in values:
-
             try:
-
                 DataNode.objects.get(row_pos=str(row), column_pos=str(col))
                 obj = DataNode.objects.get(row_pos=str(row), column_pos=str(col))
                 obj.data = elem
                 obj.save()
             except:
                 DataNode.objects.create(row_pos=str(row), column_pos=str(col), data=elem)
-
-
-
 
             if (col == max_col - 1):
                 col = 0
@@ -70,8 +68,6 @@ def home(request):
         return redirect('index')
 
     return render(request, 'database_app/index.html', context)
-
-
 
 
 def recieve_table(req, data, table_id):
@@ -118,3 +114,21 @@ def recieve_table(req, data, table_id):
 
     return HttpResponse('')
 
+
+def signup(request):
+    if request.method == 'POST':
+        form = SignUpForm(request.POST)
+        if form.is_valid():
+            user = form.save()
+            user.refresh_from_db()  
+
+            user.save()
+            raw_password = form.cleaned_data.get('password1')
+ 
+            user = authenticate(username=user.username, password=raw_password)
+            login(request, user)
+ 
+            return redirect('/')
+    else:
+        form = SignUpForm()
+    return render(request, 'registration/signup.html', {'form': form})
