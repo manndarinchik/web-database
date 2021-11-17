@@ -1,8 +1,8 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from .models import DataNode, DataTable
-from .forms import SignUpForm
-from django.contrib.auth.models import User
+from .forms import SignUpForm, ChangePermissionsform
+from django.contrib.auth.models import User, Group
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate, login
 
@@ -36,7 +36,8 @@ def home(request):
 
     context = {
         "table": data,
-        "user": request.user
+        "user": request.user,
+        "user_group": request.user.groups.all()[0].name
         #"table_name": table.name,
         #"table_id": table.id
     }
@@ -132,3 +133,37 @@ def signup(request):
     else:
         form = SignUpForm()
     return render(request, 'registration/signup.html', {'form': form})
+
+def admin(req):
+    if req.method == 'POST':
+
+        form = ChangePermissionsform(req.POST)
+        if form.is_valid():
+            user = User.objects.get(id=req.POST['user'])
+            permissions = req.POST['permissions']
+            
+            g = user.groups.all()[0]
+            g.user_set.remove(user)
+            user.groups.clear()
+
+            if permissions:
+                new_group = Group.objects.get(id=permissions)
+                                
+                print(permissions, new_group)
+                new_group.user_set.add(user)
+                user.groups.set([new_group])
+
+            print(user.groups.all())
+
+            return render(req, 'database_app/admin.html', {
+                'form': form,
+                'changed': True, 
+                'changed_user': user.username,
+                'changed_perm': permissions
+                })
+            
+    else:
+        form = ChangePermissionsform()
+
+    return render(req, 'database_app/admin.html', {'form': form,  'changed': False})
+    
