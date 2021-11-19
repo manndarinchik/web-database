@@ -3,12 +3,25 @@ from django.http import HttpResponse
 from .models import DataNode, DataTable
 from .forms import SignUpForm, ChangePermissionsform
 from django.contrib.auth.models import User, Group
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, permission_required
 from django.contrib.auth import authenticate, login
 
 
 @login_required
 def home(request):
+    context = {
+        "user": request.user,
+        "no_permissions": False,
+    }
+
+    user_groups = request.user.groups.all()
+    if not len(user_groups):
+        context.update({"no_permissions": True})
+        context.update({"user_group": "- отсутствует"})
+    else:
+        context.update({"user_group": user_groups[0].name})
+        
+
     nodes = DataNode.objects.all()
     #nodes = table.nodes.all()
 
@@ -34,14 +47,7 @@ def home(request):
     for entry in nodes:
         data[entry.row_pos][entry.column_pos] = entry.data
 
-    context = {
-        "table": data,
-        "user": request.user,
-        "user_group": request.user.groups.all()[0].name
-        #"table_name": table.name,
-        #"table_id": table.id
-    }
-
+    context.update({"table": data})
     # Приём данных
 
     if request.method == 'POST':
@@ -142,11 +148,12 @@ def admin(req):
             user = User.objects.get(id=req.POST['user'])
             permissions = req.POST['permissions']
             
-            g = user.groups.all()[0]
-            g.user_set.remove(user)
-            user.groups.clear()
+            g = user.groups.all()
+            if len(g):
+                g[0].user_set.remove(user)
+                user.groups.clear()
 
-            if permissions:
+            if permissions != '0':
                 new_group = Group.objects.get(id=permissions)
                                 
                 print(permissions, new_group)
@@ -160,7 +167,7 @@ def admin(req):
                 'changed': True, 
                 'changed_user': user.username,
                 'changed_perm': permissions
-                })
+            })
             
     else:
         form = ChangePermissionsform()
