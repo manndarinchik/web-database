@@ -46,24 +46,17 @@ buttonColumn.addEventListener('click', function() {
 })
 
 const buttonChange = document.getElementById("button_change");
-const buttonCancel = document.getElementById("button_cancel");
 let access = 0;
-
-buttonCancel.addEventListener('click', function(){
-    buttonChange.style.display = "inline-block";
-    buttonCancel.style.display = "none";
-    buttonRow.style.display = "none";
-    butt.style.display = "none";
-
-})
 
 buttonChange.addEventListener('click', function() {
     buttonRow.style.display = "inline-block";
-    buttonChange.style.display = "none";
-    buttonCancel.style.display = "inline-block";
     butt.style.display = "inline-block";
 
     if (access % 2 == 0) {
+        buttonRow.style.display = "inline-block";
+        butt.style.display = "inline-block";
+        buttonChange.innerHTML = "Отмена"
+
         access += 1;
         buttonColumn.style.visibility = 'visible';
         buttonRow.style.display = 'block';
@@ -83,6 +76,10 @@ buttonChange.addEventListener('click', function() {
         }
 
     } else {
+        buttonRow.style.display = "none";
+        butt.style.display = "none";
+        buttonChange.innerHTML = "Изменить"
+
         access -= 1;
         buttonColumn.style.visibility = 'hidden';
         buttonRow.style.display = 'none';
@@ -90,7 +87,7 @@ buttonChange.addEventListener('click', function() {
         for (let i = 0; i < allTr.length; i++) {
             let allTd = allTr[i].querySelectorAll('td');
             for (let j = 0; j < allTd.length; j++) {
-                if (allTd[j].id != 'buttonColumn') {
+                if (allTd[j].className != 'buttonColumn') {
                     let tdText = String(allTd[j].childNodes[0].value).trim();
                     allTd[j].childNodes[0].remove();
                     allTd[j].innerHTML = tdText;

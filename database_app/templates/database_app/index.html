@@ -24,7 +24,7 @@
                     {% for i in table %}
                         <tr {% if forloop.counter == 1 %} class="table_head"{%else%}{%endif%}>
                         {% for j in i %}
-                            <td>
+                            <td style="width:200px;">
                                 {{ j }}
                             </td>
                             {% endfor %} 
@@ -36,7 +36,6 @@
             <div class="btn btn-outline-success" id="buttonRow" style="display: none;">+</div>
             <br>
             <div class="btn btn-warning" id="button_change" style="display: inline-block;">Изменить</div>
-            <div class="btn btn-warning" id="button_cancel" style="display: none;">Отмена</div>
             <br>
             <input type="text" class='agent' name="agent">
             <button class="btn btn-primary" id="justButton" style="display: none;">Сохранить</button>
