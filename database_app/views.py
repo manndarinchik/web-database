@@ -50,9 +50,7 @@ def home(request):
         print(values, len(values))
         max_row = int(len(values) / max_col)
         all_row, all_column = max_table(nodes)
-        print(max_row, all_row)
-        print(max_col, all_column)
-        print(nodes)
+
 
         if (all_row > max_row):
             for i in range(max_row, all_row):

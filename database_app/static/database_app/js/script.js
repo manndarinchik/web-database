@@ -1,3 +1,54 @@
+/*---------------Поиск-----------------*/
+const search = document.getElementById("search");
+search.addEventListener('click', function() {
+    let input = document.getElementById("input");
+    let allTr = document.querySelectorAll("tr");
+    let len = allTr[0].querySelectorAll("td");
+    console.log(input.value);
+    for (let i = 0; i < allTr.length; i++) {
+        let masOfTd = allTr[i].querySelectorAll("td")
+        let access = false;
+        for (let j = 0; j < masOfTd.length; j++) {
+            if (masOfTd[j].textContent.trim().includes(input.value)) {
+                access = true;
+                break;
+            }
+        }
+        if (access) {
+            continue;
+        } else {
+            allTr[i].style.display = "none";
+        }   
+    }
+    buttonChange.style.display = "none";
+});
+
+const cancelButton = document.getElementById("cancel");
+cancelButton.addEventListener('click', function() {
+    let allTr = document.querySelectorAll("tr");
+    for (let i = 0; i < allTr.length; i++) {
+        allTr[i].style.display = "table-row";
+    }
+    let input = document.getElementById("input");
+    input.value = '';
+    buttonChange.style.display = "inline-block";
+})
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 /*-------Изначальная таблица-----------*/
 const oldTr = document.querySelectorAll("tr");
 const oldTd = oldTr[0].querySelectorAll("td");

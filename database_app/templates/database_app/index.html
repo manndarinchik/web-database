@@ -16,7 +16,11 @@
 </head>
 <body>
     <h1>Таблица</h1>
-
+        <section class="table__search">
+            <input type="text" placeholder="Найти..." id="input">
+            <button id="cancel">Отмена</button>
+            <button id="search">Поиск</button>
+        </section>
         <form action="" method="post" name="ourForm">
                     {% csrf_token %}
             <div class="table-responsive">
