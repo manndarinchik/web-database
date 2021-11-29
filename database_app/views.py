@@ -23,25 +23,27 @@ def home(request):
         
 
     nodes = DataNode.objects.all()
-    #nodes = table.nodes.all()
+
+
+    # Вместо data_h и data_w теперь data_row (максимальное количество строк) и data_column (максимальное количество столбцов)
+    def max_table(nodes):
+        data_row = 0
+        data_column = 0
+        for entry in nodes:
+            if entry.row_pos > data_row:
+                data_row = entry.row_pos
+            if entry.column_pos > data_column:
+                data_column = entry.column_pos
+        return int(data_row) + 1, int(data_column) + 1
 
     # Найти границы таблицы
-    data_w = 0
-    data_h = 0
+    # Вместо data_h и data_w теперь data_row (максимальное количество строк) и data_column (максимальное количество столбцов)
+    data_row, data_column = max_table(nodes)
 
-    for entry in nodes:
-        if entry.row_pos > data_h:
-            data_h = entry.row_pos
-        if entry.column_pos > data_w:
-            data_w = entry.column_pos
+    data = [0] * data_row
 
-    data_w += 1
-    data_h += 1
-    data = [0] * data_h
-
-    for i in range(data_h):
-        data[i] = [0] * data_w
-
+    for i in range(data_row):
+        data[i] = [0] * data_column
     # Заполнить таблицу ячейками
 
     for entry in nodes:
@@ -56,6 +58,21 @@ def home(request):
         max_col = int(request.POST['agent'])
 
         values = request.POST.getlist('ourInput')
+        print(values, len(values))
+        max_row = int(len(values) / max_col)
+        all_row, all_column = max_table(nodes)
+
+
+        if (all_row > max_row):
+            for i in range(max_row, all_row):
+                for j in range(all_column):
+                    DataNode.objects.get(row_pos=i, column_pos=j).delete()
+                all_row -= 1
+
+        if (max_col - 1 < all_column):
+            for i in range(max_col, all_column):
+                for j in range(all_row):
+                    DataNode.objects.get(row_pos=j, column_pos=i).delete()
 
         for elem in values:
             try:
@@ -63,6 +80,7 @@ def home(request):
                 obj = DataNode.objects.get(row_pos=str(row), column_pos=str(col))
                 obj.data = elem
                 obj.save()
+
             except:
                 DataNode.objects.create(row_pos=str(row), column_pos=str(col), data=elem)
 
