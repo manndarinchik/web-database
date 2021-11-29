@@ -158,6 +158,8 @@ buttonChange.addEventListener('click', function() {
                 allTd[j].innerHTML = tdText;
             }
         }
+
+        ResetTable();
     }
 });
 /*-------------------------------------*/
@@ -166,7 +168,9 @@ buttonChange.addEventListener('click', function() {
 /*-----------Кнопка "отмена"-----------*/
 
 let resetButton = document.getElementById("resetButton");
-resetButton.addEventListener('click', function() {
+resetButton.addEventListener('click', ResetTable);
+
+function ResetTable(){
     let newTr = document.querySelectorAll("tr");
     if (newTr.length > oldTr.length) {
         for (let i = oldTr.length; i < newTr.length; i++) {
@@ -181,7 +185,9 @@ resetButton.addEventListener('click', function() {
         
     }
     agent.setAttribute('value', oldTr[0].querySelectorAll('td').length);
-});
+
+    return;
+}
 
 /*-------------------------------------*/
 
