@@ -10,7 +10,7 @@
 
     {% if perms.database_app.can_view %}
 
-    {% if user_group == "admins "%}
+    {% if user_group == "admins" %}
     <p><a href="{% url 'admin' %}">Администрация</a></p>
     {% endif %}
     <h1>Таблица</h1>
