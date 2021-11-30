@@ -4,9 +4,8 @@ search.addEventListener('click', function() {
     let input = document.getElementById("input");
     let allTr = document.querySelectorAll("tr");
     let len = allTr[0].querySelectorAll("td");
-    console.log(input.value);
-    for (let i = 0; i < allTr.length; i++) {
-        let masOfTd = allTr[i].querySelectorAll("td")
+    for (let i = 1; i < allTr.length; i++) {
+        let masOfTd = allTr[i].querySelectorAll("td");
         let access = false;
         for (let j = 0; j < masOfTd.length; j++) {
             if (masOfTd[j].textContent.trim().includes(input.value)) {
@@ -22,7 +21,10 @@ search.addEventListener('click', function() {
     }
     buttonChange.style.display = "none";
 });
+/*-------------------------------------*/
 
+
+/*-------------------------------------*/
 const cancelButton = document.getElementById("cancel");
 cancelButton.addEventListener('click', function() {
     let allTr = document.querySelectorAll("tr");
@@ -32,24 +34,12 @@ cancelButton.addEventListener('click', function() {
     let input = document.getElementById("input");
     input.value = '';
     buttonChange.style.display = "inline-block";
-})
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+});
+/*-------------------------------------*/
 
 
 /*-------Изначальная таблица-----------*/
+let table = document.querySelector("table");
 const oldTr = document.querySelectorAll("tr");
 const oldTd = oldTr[0].querySelectorAll("td");
 /*-------------------------------------*/
@@ -74,6 +64,7 @@ addColumn.addEventListener('click', function() {
         allTr[i].append(newColumn);
     }
     agent.setAttribute('value', allTr[0].querySelectorAll('td').length);
+    let table = document.querySelector("table")
 });
 /*-------------------------------------*/
 
@@ -89,6 +80,7 @@ deleteColumn.addEventListener('click', function() {
         lastTd.remove();
     }
     agent.setAttribute('value', allTr[0].querySelectorAll('td').length);
+    let table = document.querySelector("table")
 });
 /*-------------------------------------*/
 
@@ -98,6 +90,7 @@ const deleteRow = document.getElementById("deleteRow");
 deleteRow.addEventListener('click', function() {
     let lastTr = document.querySelectorAll('tr')[document.querySelectorAll("tr").length - 1];
     lastTr.remove();
+    let table = document.querySelector("table");
 });
 /*-------------------------------------*/
 
@@ -115,6 +108,7 @@ addRow.addEventListener('click', function() {
         newTd.append(input);
         newTr.append(newTd);
     }
+    let table = document.querySelector("table");
 });
 /*-------------------------------------*/
 
@@ -123,7 +117,7 @@ addRow.addEventListener('click', function() {
 const buttonChange = document.getElementById("button_change");
 let access = 0;
 buttonChange.addEventListener('click', function() {
-    if (access % 2 == 0) {
+    if (access % 2 == 0 && squareAccess == 0) {
         buttonChange.innerHTML = "Выйти"
         document.querySelector(".buttonsColumn").style.display = 'block';
         document.querySelector(".buttonsRow").style.display = 'block';
@@ -141,8 +135,9 @@ buttonChange.addEventListener('click', function() {
                 tempInput.value = tdText;
                 allTd[j].append(tempInput);     
             }
+        agent.setAttribute('value', oldTr[0].querySelectorAll('td').length);
         }
-    } else {
+    } else if (squareAccess == 0) {
         document.querySelector(".buttonsColumn").style.display = 'none';
         document.querySelector(".buttonsRow").style.display = 'none';
         document.getElementById("justButton").style.display = 'none';
@@ -198,3 +193,146 @@ submitButton.addEventListener('submit', function(e) {
     xhr.send(newForm);
 });
 /*-------------------------------------*/
+
+
+/*-------------------------------------*/
+function buttons() {
+    let button = document.createElement("button");
+    button.style.width = "20px";
+    button.setAttribute("type", "button")
+    button.style.height = "20px";
+    button.style.backgroundColor = "green";
+    button.style.position = "absolute";
+    return button;
+}
+/*
+function dualButton(button, location) {
+    const addButton = document.createElement("button");
+    const deleteButton = document.createElement("button");
+    
+    addButton.setAttribute("type", "button");
+    deleteButton.setAttribute("type", "button");
+    
+    addButton.style.backgroundColor = "green";
+    
+    deleteButton.style.backgroundColor = "red";
+
+
+    location.append(addButton);
+    location.append(deleteButton);
+
+}
+*/
+function show(obj) {
+    let allTr = document.querySelectorAll("tr");
+    const ourTr = allTr[getPosTr(obj.closest("td"))];
+    let newTr = document.createElement("tr");
+    switch (obj.getAttribute("id")) {
+        
+        case "right":
+            for (let i = 0; i < allTr.length; i++) {
+                let ourTd = allTr[i].querySelectorAll("td")[getPosTd(obj.closest("td"))];
+                let newTd = document.createElement("td");
+                ourTd.after(newTd);
+            }
+            break;
+        
+        case "left":
+            const position = getPosTd(obj.closest("td"))
+            for (let i = 0; i < allTr.length; i++) {
+                let ourTd = allTr[i].querySelectorAll("td")[position];
+                let newTd = document.createElement("td");
+                ourTd.before(newTd);
+            }
+            break;
+
+        case "top":
+            for (let i = 0; i < allTr[0].querySelectorAll("td").length; i++) {
+                newTr.append(document.createElement("td"));
+            }
+            ourTr.before(newTr)
+            break;
+
+        case "bottom":
+            for (let i = 0; i < allTr[0].querySelectorAll("td").length; i++) {
+                newTr.append(document.createElement("td"));
+            }
+            ourTr.after(newTr);
+            break;
+
+    }
+}
+
+function makeButtons(xCords, yCords, obj) {
+    // Справа xCords + 15; yCords - 10
+    // Слева xCords - 45; yCords - 10
+    // Сверху xCords - 10; yCords - 35
+    // Снизу xCords - 10; yCords + 15
+    x = [xCords + 15, xCords - 35, xCords - 10, xCords - 10];
+    y = [yCords - 10, yCords - 10, yCords - 35, yCords + 15];
+    id = ["right", "left", "top", "bottom"];
+    for (let i = 0; i < 4; i++) {
+        
+        let button = buttons();
+        button.style.left = `${x[i]}px`;
+        button.style.top = `${y[i]}px`;
+        button.setAttribute("id", id[i]);
+        button.setAttribute("onclick", "show(this)");
+        button.style.zIndex = '1000';
+        obj.append(button);
+
+    }
+    
+}
+
+let squareAccess = 0;
+document.body.addEventListener('click', function(event) {
+    let td = event.target;
+    if (td.tagName == "BUTTON") {
+        return;
+    }
+    if (td.closest("td") && access == 0) {
+        if (squareAccess == 0 && access == 0) {
+            td.style.transition = ".2s";
+            td.classList.add("dark");
+            activeGray = td;
+            td.style.position = "relative";
+            makeButtons(event.clientX - td.offsetLeft, event.clientY - td.offsetTop, td);
+            squareAccess += 1;
+        } else {
+            deleteStyles();
+        }
+    } else if (squareAccess == 1 && access == 0){
+        deleteStyles();
+    }
+});
+
+function deleteStyles() {
+    document.getElementById("top").remove();
+    document.getElementById("left").remove();
+    document.getElementById("right").remove();
+    document.getElementById("bottom").remove();
+    activeGray.classList.remove("dark");
+    squareAccess -= 1;
+}
+
+function getPosTr(td) {
+    tr = td.closest("tr")
+    let allTr = document.querySelectorAll("tr");
+    for (let i = 0; i < allTr.length; i++) {
+        if (allTr[i] == tr) {
+            return i;
+        }
+    }
+    return undefined;
+}
+
+function getPosTd(td) {
+    let allTr = document.querySelectorAll("tr");
+    for (let i = 0; i < allTr[0].querySelectorAll("td").length; i++) {
+        if (td == allTr[getPosTr(td)].querySelectorAll("td")[i]) {
+            return i;
+        }
+    }
+    return undefined;
+}

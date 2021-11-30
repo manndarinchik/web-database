@@ -82,8 +82,10 @@ body {
     align-items: center;
 }
 
+
 .table-responsive {
 	display: flex;
+	overflow-x: visible !important;
 }
 
 
@@ -126,7 +128,7 @@ td:nth-child(1) {
 
 td:nth-child(2) {
 	min-width: 150px;
-}	
+}
 
 #resetButton {
 	border: 1px solid #000;
@@ -144,6 +146,11 @@ td:nth-child(2) {
 	display: none;
 }
 
+.dark {
+	transition: .2s;
+	background-color: gray !important;
+	position: relative;
+}
 
 input {
 	border: 1px solid #000;
