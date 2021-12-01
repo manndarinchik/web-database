@@ -197,87 +197,139 @@ submitButton.addEventListener('submit', function(e) {
 
 /*-------------------------------------*/
 function buttons() {
-    let button = document.createElement("button");
-    button.style.width = "20px";
-    button.setAttribute("type", "button")
-    button.style.height = "20px";
-    button.style.backgroundColor = "green";
-    button.style.position = "absolute";
-    return button;
-}
-/*
-function dualButton(button, location) {
+    const buttonWrapper = document.createElement("div");
+    const choiceButton = document.createElement("button");
     const addButton = document.createElement("button");
     const deleteButton = document.createElement("button");
-    
-    addButton.setAttribute("type", "button");
-    deleteButton.setAttribute("type", "button");
-    
-    addButton.style.backgroundColor = "green";
-    
-    deleteButton.style.backgroundColor = "red";
+    const mas = [addButton, choiceButton, deleteButton];
 
-
-    location.append(addButton);
-    location.append(deleteButton);
-
+    for (let i = 0; i < 3; i++) {
+        mas[i].setAttribute("type", "button");
+        buttonWrapper.append(mas[i]);
+        if (i % 2 == 0) {
+            mas[i].classList.add("hide")
+        } else {
+            mas[i].classList.add("choiceButton");
+        }
+    }
+    buttonWrapper.classList.add("choiceButton__wrapper")
+    return buttonWrapper
 }
-*/
-function show(obj) {
-    let allTr = document.querySelectorAll("tr");
-    const ourTr = allTr[getPosTr(obj.closest("td"))];
-    let newTr = document.createElement("tr");
+
+function toWrapper(ourWrapper) {
+    const allWrappers = document.querySelectorAll(".choiceButton__wrapper");
+    for (let i = 0; i < 4; i++) {
+        if (allWrappers[i] == ourWrapper) {
+            continue;
+        }
+        // Немножко наговнокодил
+        allWrappers[i].childNodes[0].classList.remove("addButton");
+        allWrappers[i].childNodes[0].classList.add("hide");
+        allWrappers[i].childNodes[2].classList.remove("deleteButton");
+        allWrappers[i].childNodes[2].classList.add("hide");
+        allWrappers[i].childNodes[1].classList.remove("hide");
+        allWrappers[i].childNodes[1].classList.add("choiceButton");
+    }
+}
+
+function dualButton(wrapper) {
+    for (let i = 0; i < 3; i++) {
+        wrapper.childNodes[i].classList.toggle("hide");
+    }
+
+    toWrapper(wrapper)
+    // И тут наговнокодил
+    wrapper.childNodes[0].classList.toggle("addButton");
+    wrapper.childNodes[0].setAttribute("id", wrapper.classList[1]);
+    wrapper.childNodes[0].setAttribute("onclick", "show(this)");
+    wrapper.childNodes[2].classList.toggle("deleteButton");
+    wrapper.childNodes[2].setAttribute("id", wrapper.classList[1] + "Delete");
+    wrapper.childNodes[2].setAttribute("onclick", "deleteRC(this)");
+
+    
+}
+
+function deleteRC(obj) {
+    const allTr = document.querySelectorAll("tr");
+    function deleteRL(side) {
+        const position = getPosTd(obj.closest("td"));
+        for (let i = 0; i < allTr.length; i++) {
+            if (side == "right") allTr[i].querySelectorAll("td")[position + 1].remove();
+            else allTr[i].querySelectorAll("td")[position - 1].remove();
+        }
+    }
+    function deleteTB(side) {
+        if (side == "top") allTr[getPosTr(obj) - 1].remove();
+        else allTr[getPosTr(obj) + 1].remove();
+    }
     switch (obj.getAttribute("id")) {
-        
+        case "rightDelete":
+            deleteRL("right");
+            break;
+        case "leftDelete":
+            deleteRL("left");
+            break;
+        case "topDelete":
+            deleteTB("top");
+            break;
+        case "bottomDelete":
+            deleteTB("bottom");
+            break;
+    }
+}
+
+function show(obj) {
+    const allTr = document.querySelectorAll("tr");
+    function showRL(side) {
+        const position = getPosTd(obj.closest("td"));
+        console.log(position);
+        for (let i = 0; i < allTr.length; i++) {
+            let ourTd = allTr[i].querySelectorAll("td")[position];
+            let newTd = document.createElement("td");
+            if (side == "right") ourTd.after(newTd);
+            else ourTd.before(newTd);
+        }
+    }
+    function showTB(side) {
+        const ourTr = allTr[getPosTr(obj.closest("td"))];
+        const newTr = document.createElement("tr");
+        for (let i = 0; i < allTr[0].querySelectorAll("td").length; i++) {
+            newTr.append(document.createElement("td"));
+        }
+        if (side == "top") ourTr.before(newTr);
+        else ourTr.after(newTr);
+    }
+    switch (obj.getAttribute("id")) {
         case "right":
-            for (let i = 0; i < allTr.length; i++) {
-                let ourTd = allTr[i].querySelectorAll("td")[getPosTd(obj.closest("td"))];
-                let newTd = document.createElement("td");
-                ourTd.after(newTd);
-            }
+            showRL("right");
             break;
-        
         case "left":
-            const position = getPosTd(obj.closest("td"))
-            for (let i = 0; i < allTr.length; i++) {
-                let ourTd = allTr[i].querySelectorAll("td")[position];
-                let newTd = document.createElement("td");
-                ourTd.before(newTd);
-            }
+            showRL("left");
             break;
-
         case "top":
-            for (let i = 0; i < allTr[0].querySelectorAll("td").length; i++) {
-                newTr.append(document.createElement("td"));
-            }
-            ourTr.before(newTr)
+            showTB("top");
             break;
-
         case "bottom":
-            for (let i = 0; i < allTr[0].querySelectorAll("td").length; i++) {
-                newTr.append(document.createElement("td"));
-            }
-            ourTr.after(newTr);
+            showTB("bottom");
             break;
-
     }
 }
 
 function makeButtons(xCords, yCords, obj) {
     // Справа xCords + 15; yCords - 10
-    // Слева xCords - 45; yCords - 10
-    // Сверху xCords - 10; yCords - 35
-    // Снизу xCords - 10; yCords + 15
-    x = [xCords + 15, xCords - 35, xCords - 10, xCords - 10];
+    // Слева xCords - 65; yCords - 10
+    // Сверху xCords - 25; yCords - 35
+    // Снизу xCords - 25; yCords + 15
+    x = [xCords + 15, xCords - 65, xCords - 25, xCords - 25];
     y = [yCords - 10, yCords - 10, yCords - 35, yCords + 15];
-    id = ["right", "left", "top", "bottom"];
+    pos = ["right", "left", "top", "bottom"];
     for (let i = 0; i < 4; i++) {
         
         let button = buttons();
         button.style.left = `${x[i]}px`;
         button.style.top = `${y[i]}px`;
-        button.setAttribute("id", id[i]);
-        button.setAttribute("onclick", "show(this)");
+        button.classList.add(pos[i]);
+        button.setAttribute("onclick", "dualButton(this)");
         button.style.zIndex = '1000';
         obj.append(button);
 
@@ -308,10 +360,10 @@ document.body.addEventListener('click', function(event) {
 });
 
 function deleteStyles() {
-    document.getElementById("top").remove();
-    document.getElementById("left").remove();
-    document.getElementById("right").remove();
-    document.getElementById("bottom").remove();
+    let allButtons = document.querySelectorAll(".choiceButton__wrapper");
+    for (let i = 0; i < 4; i++) {
+        allButtons[i].remove();
+    }
     activeGray.classList.remove("dark");
     squareAccess -= 1;
 }

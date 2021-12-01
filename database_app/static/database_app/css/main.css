@@ -169,3 +169,45 @@ input {
 .agent {
     display: none;
 }
+
+.choiceButton__wrapper {
+	width: 50px;
+	height: 20px;
+	position: absolute;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+}
+
+.addButton {
+	background-color: green;
+	height: 9px;
+	transition: .2s;
+}
+
+.deleteButton {
+	background-color: red;
+	height: 9px;
+	transition: .2s;
+}
+
+.choiceButtons__wrapper {
+	width: 50px;
+	height: 20px;
+	position: absolute;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+	transition: .2s;
+}
+
+.choiceButton {
+	width: inherit;
+	height: inherit;
+	background-color: green;
+	transition: .2s;
+}
+
+.hide {
+	display: none;
+}
