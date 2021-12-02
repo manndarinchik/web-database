@@ -23,6 +23,7 @@ html,body{
 	-ms-text-size-adjust: 100%;
 	-moz-text-size-adjust: 100%;
 	-webkit-text-size-adjust: 100%;
+	font-family: "Roboto", sans-serif;
 }
 input,button,textarea{font-family:inherit;}
 table {
@@ -38,9 +39,28 @@ img{vertical-align: top;}
 
 h1,h2,h3,h4,h5,h6{font-size:inherit;font-weight: 400;}
 /*--------------------*/
+	
+.content_container {
+	margin-left: 2%;
+	margin-right: 2%;
+}
+@media (max-width:900px	) {	
+	.content_container {
+		margin: 0%;
+	}	
+	
+	.table-element {
+		margin-top: 5px;
+		margin-bottom: 5px;
+	}
+	*{
+		font-size: large;
+	}
+}
 
-body {
-	font-family: "Roboto", sans-serif;
+.table-element {
+	margin-top: 5px;
+	margin-bottom: 5px;
 }
 
 .wrapper {
@@ -100,10 +120,9 @@ body {
 	background-color: red;
 }
 
-td.table__header {
-	
-	font-size: 20px;
+.table_head {
 	font-weight: 800;
+	background-color: #dDD;
 }
 tr {
 	height: 30px;
