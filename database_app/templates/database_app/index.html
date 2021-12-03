@@ -1,24 +1,16 @@
 {% extends 'base_generic.html' %}
 
 {% block content %}
-    <p>{{user.username}} (группа {{user_group}})</p>
-    <p><a href="{% url 'logout' %}">Выйти</a></p>
-
-    {% if no_permissions %}
-    <p>Обратитесь у администратору для получения доступа. </p>
-    {% endif %}
 
     {% if perms.database_app.can_view %}
-
-    {% if user_group == "admins" %}
-    <p><a href="{% url 'admin' %}">Администрация</a></p>
-    {% endif %}
     <h1>Таблица</h1>
-        <section class="table__search">
-            <input type="text" placeholder="Найти..." id="input">
-            <button id="cancel">Отмена</button>
-            <button id="search">Поиск</button>
-        </section>
+
+        <div class="input-group">
+            <input type="text" class="form-control" placeholder="Найти..." aria-label="Поиск по таблице" aria-describedby="search" id="input">
+            <button class="btn btn-outline-primary" type="button" id="search">Поиск</button>
+            <button class="btn btn-outline-danger" type="button" id="cancel">Отмена</button>
+        </div>
+
         <form action="" method="post" name="ourForm">
             {% csrf_token %}
             <div class="table-responsive">
@@ -27,7 +19,7 @@
                         <tr {% if forloop.counter == 1 %} class="table_head"{%else%}{%endif%}>
                             {% for j in i %}
                             <td>
-                                <p class="table-element">{{ j }}</p>
+                                {{ j }}
                             </td>{% endfor %} 
                         </tr>{% endfor %}
                     </table>
@@ -44,13 +36,14 @@
             {% if perms.database_app.can_edit %}
             <div class="btn btn-outline-success" id="buttonRow" style="display: none;">+</div>
             <br>
+            <button class="btn btn-secondary" type="button" id="resetButton" style="display: none;">Отменить изменения</button>
+            <br>
             <div class="btn btn-warning" id="button_change" style="display: inline-block;">Изменить</div>
-            <button type="button" id="resetButton" style="display: none;">Отменить изменения</button>
             <br>
             <input type="text" class='agent' name="agent">
             <button class="btn btn-primary" id="justButton" style="display: none;">Сохранить изменения</button>
             {% endif %}
 
-            {% endif %}
+        {% endif %}
         </form>
 {% endblock %}
