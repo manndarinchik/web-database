@@ -35,20 +35,6 @@ cancelButton.addEventListener('click', function() {
 })
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 /*-------Изначальная таблица-----------*/
 const oldTr = document.querySelectorAll("tr");
 const oldTd = oldTr[0].querySelectorAll("td");
@@ -138,6 +124,8 @@ buttonChange.addEventListener('click', function() {
                 allTd[j].innerHTML = '';
                 let tempInput = document.createElement('input');
                 tempInput.setAttribute('name', 'ourInput');
+                tempInput.setAttribute('style', 'background-color: rgba(220, 220, 255, 0.2);');
+                tempInput.classList.add('form-control');
                 tempInput.value = tdText;
                 allTd[j].append(tempInput);     
             }
