@@ -2,20 +2,25 @@
 
 {% block content %}
 
-    <div class="container-sm">
-        <h2>Управление правами пользователей</h2>
-
-        {% if changed %}
-            <p>Уровень доступа пользователя {{changed_user}} успешно изменен на {{changed_perm}}.</p>
-        {% endif %}
-
         <form action="" method="POST">
-            {% csrf_token %}
-            {{ form }}
-            <input type="submit" value="Submit">
+            <div class="card" style="margin-top: 2rem; width: 100%;">
+                <div class="card-header">
+                    <h3 class="card-title">Управление правами пользователей</h3>
+                </div>
+                <div class="card-body">
+                    {% csrf_token %}
+                    <p><b>Пользователь: </b>{{ form.user }}</p>
+                    <p><b>Уровень доступа: </b>{{ form.permissions }}</p>
+                    <input class="btn btn-primary" type="submit" value="Подтвердить">
+                    <a class="btn btn-danger" href="{% url 'index' %}">На главную</a>
+                </div>
+                
+                {% if changed %}
+                <div class="card-footer">
+                    <p>Уровень доступа пользователя <b>{{changed_user}}</b> успешно изменен на <b>{{changed_perm}}</b>.</p>
+                </div>
+                {% endif %}
+            </div>
         </form>
-
-        <p><a href={% url 'index' %}>На главную</a></p>
-    </div>
 
 {% endblock %}
