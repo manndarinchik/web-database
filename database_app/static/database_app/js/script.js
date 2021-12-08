@@ -24,6 +24,12 @@ search.addEventListener('click', function() {
 /*-------------------------------------*/
 
 
+/*-------------------------------------*/
+function getColumn() {
+    
+}
+
+/*-------------------------------------*/
 
 /*-------------------------------------*/
 const cancelButton = document.getElementById("cancel");
@@ -57,7 +63,7 @@ const buttonChange = document.getElementById("button_change");
 let access = 0;
 buttonChange.addEventListener('click', function() {
     if (access % 2 == 0 && squareAccess == 0) {
-        buttonChange.innerHTML = "Выйти"
+        buttonChange.innerHTML = "Выйти";
         document.getElementById("justButton").style.display = 'block';
         document.getElementById("resetButton").style.display = 'block';
         access += 1;
@@ -275,7 +281,7 @@ function makeButtons(xCords, yCords, obj) {
 let squareAccess = 0;
 document.body.addEventListener('click', function(event) {
     let td = event.target;
-    console.log(document.querySelector(".content").offsetTop)
+    
     if (td.tagName == "BUTTON") {
         return;
     }
@@ -283,10 +289,8 @@ document.body.addEventListener('click', function(event) {
         if (squareAccess == 0 && access == 0) {
             td.style.transition = ".2s";
             td.classList.add("dark");
-            console.log(document.querySelector(".table__inner").scrollLeft, "hello")
             activeGray = td;
-            td.style.position = "relative";
-            makeButtons(event.clientX - td.offsetLeft - document.querySelector(".content").offsetLeft + document.querySelector(".table__inner").scrollLeft, event.clientY - td.offsetTop, td);
+            makeButtons(event.clientX - document.querySelector(".content").offsetLeft - td.offsetLeft - document.querySelector(".table-responsive").offsetLeft + document.querySelector(".table-responsive").scrollLeft, event.clientY - td.closest("tr").offsetTop, td);
             squareAccess += 1;
         } else {
             deleteStyles();
@@ -325,7 +329,3 @@ function getPosTd(td) {
     }
     return undefined;
 }
-
-document.body.addEventListener('click', function(event) {
-    console.log(event.clientX, event.clientY);
-})
