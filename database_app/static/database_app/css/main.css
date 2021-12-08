@@ -49,15 +49,26 @@ body {
 }
 
 .content {
-	padding: 0 15px;
-	max-width: 335px;
+	margin: 0 auto;
+	max-width: 1280px;
 	width: 100%;
 	position: relative;
 }
 
-.table__search {
+h1 {
+    text-align: center;
+}
+
+.table_wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.table_search {
     display: flex;
     align-items: center;
+    width: 100%;
 }
 
 #cancel {
@@ -85,7 +96,12 @@ body {
 
 .table-responsive {
 	display: flex;
-	overflow-x: visible !important;
+    justify-content: center;
+}
+
+.table__inner {
+    overflow-x: scroll;
+    max-width: 1280px;
 }
 
 

@@ -24,6 +24,7 @@ search.addEventListener('click', function() {
 /*-------------------------------------*/
 
 
+
 /*-------------------------------------*/
 const cancelButton = document.getElementById("cancel");
 cancelButton.addEventListener('click', function() {
@@ -51,76 +52,12 @@ agent.setAttribute('value', document.querySelectorAll("tr")[0].querySelectorAll(
 /*-------------------------------------*/
 
 
-/*---------Добавление колонки----------*/
-const addColumn = document.getElementById("addColumn");
-addColumn.addEventListener('click', function() {
-    let allTr = document.querySelectorAll("tr");
-    for (let i = 0; i < allTr.length; i++) {
-        newColumn = document.createElement('td');
-        newColumn.style.width = '200px';
-        let input = document.createElement("input");
-        input.setAttribute('name', 'ourInput');
-        newColumn.append(input);
-        allTr[i].append(newColumn);
-    }
-    agent.setAttribute('value', allTr[0].querySelectorAll('td').length);
-    let table = document.querySelector("table")
-});
-/*-------------------------------------*/
-
-
-/*----------Удаление колонки-----------*/
-const deleteColumn = document.getElementById("deleteColumn");
-deleteColumn.addEventListener('click', function() {
-    let allTr = document.querySelectorAll("tr");
-    for (let i = 0; i < allTr.length; i++) {
-        let lastTd = allTr[i].querySelectorAll("td")[allTr[i].querySelectorAll("td").length - 1];
-        agent.setAttribute('value', allTr[0].querySelectorAll('td').length);
-
-        lastTd.remove();
-    }
-    agent.setAttribute('value', allTr[0].querySelectorAll('td').length);
-    let table = document.querySelector("table")
-});
-/*-------------------------------------*/
-
-
-/*----------Удаление строки-----------*/
-const deleteRow = document.getElementById("deleteRow");
-deleteRow.addEventListener('click', function() {
-    let lastTr = document.querySelectorAll('tr')[document.querySelectorAll("tr").length - 1];
-    lastTr.remove();
-    let table = document.querySelector("table");
-});
-/*-------------------------------------*/
-
-
-/*----------Добавление строки----------*/
-const addRow = document.getElementById('addRow');
-addRow.addEventListener('click', function() {
-    let newTr = document.createElement('tr');
-    let lastTr = document.querySelectorAll('tr')[document.querySelectorAll('tr').length - 1];
-    lastTr.after(newTr);
-    for (let i = 0; i < lastTr.querySelectorAll('td').length; i++) {
-        let newTd = document.createElement('td');
-        let input = document.createElement('input');
-        input.setAttribute('name', 'ourInput');
-        newTd.append(input);
-        newTr.append(newTd);
-    }
-    let table = document.querySelector("table");
-});
-/*-------------------------------------*/
-
-
 /*----Режим редактирования/просмотра----*/
 const buttonChange = document.getElementById("button_change");
 let access = 0;
 buttonChange.addEventListener('click', function() {
     if (access % 2 == 0 && squareAccess == 0) {
         buttonChange.innerHTML = "Выйти"
-        document.querySelector(".buttonsColumn").style.display = 'block';
-        document.querySelector(".buttonsRow").style.display = 'block';
         document.getElementById("justButton").style.display = 'block';
         document.getElementById("resetButton").style.display = 'block';
         access += 1;
@@ -138,8 +75,6 @@ buttonChange.addEventListener('click', function() {
         agent.setAttribute('value', oldTr[0].querySelectorAll('td').length);
         }
     } else if (squareAccess == 0) {
-        document.querySelector(".buttonsColumn").style.display = 'none';
-        document.querySelector(".buttonsRow").style.display = 'none';
         document.getElementById("justButton").style.display = 'none';
         document.getElementById("resetButton").style.display = 'none';
         buttonChange.innerHTML = "Изменить"
@@ -340,6 +275,7 @@ function makeButtons(xCords, yCords, obj) {
 let squareAccess = 0;
 document.body.addEventListener('click', function(event) {
     let td = event.target;
+    console.log(document.querySelector(".content").offsetTop)
     if (td.tagName == "BUTTON") {
         return;
     }
@@ -347,9 +283,10 @@ document.body.addEventListener('click', function(event) {
         if (squareAccess == 0 && access == 0) {
             td.style.transition = ".2s";
             td.classList.add("dark");
+            console.log(document.querySelector(".table__inner").scrollLeft, "hello")
             activeGray = td;
             td.style.position = "relative";
-            makeButtons(event.clientX - td.offsetLeft, event.clientY - td.offsetTop, td);
+            makeButtons(event.clientX - td.offsetLeft - document.querySelector(".content").offsetLeft + document.querySelector(".table__inner").scrollLeft, event.clientY - td.offsetTop, td);
             squareAccess += 1;
         } else {
             deleteStyles();
@@ -388,3 +325,7 @@ function getPosTd(td) {
     }
     return undefined;
 }
+
+document.body.addEventListener('click', function(event) {
+    console.log(event.clientX, event.clientY);
+})
