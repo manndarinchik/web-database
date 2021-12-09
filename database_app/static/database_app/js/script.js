@@ -1,3 +1,4 @@
+
 /*---------------Поиск-----------------*/
 const search = document.getElementById("search");
 search.addEventListener('click', function() {
@@ -22,14 +23,66 @@ search.addEventListener('click', function() {
     buttonChange.style.display = "none";
 });
 /*-------------------------------------*/
-
+createSort();
 
 /*-------------------------------------*/
-function getColumn() {
-    
+function createSort() {
+    let allTableHead = document.querySelector(".table_head");
+    let allFirstTd = allTableHead.querySelectorAll("td");
+    for (let i = 0; i < allFirstTd.length; i++) {
+        const div = document.createElement("div");
+        div.classList.add("arrow");
+        div.setAttribute("onclick", "sortColumn(this)");
+        allFirstTd[i].append(div);
+    }
 }
-
 /*-------------------------------------*/
+
+
+/*---------Осторожно, говнокод---------*/
+let columnSort = false;
+function sortColumn(td) {
+    const table = document.querySelector("tbody");
+    if (!columnSort) {
+        let oldTr = document.querySelectorAll("tr");
+        let allTr = document.querySelectorAll("tr");
+        let position = getPosTd(td.parentNode);
+        let masTd = [];
+        let masWords = [];
+        let map = new Map();
+        for (let i = 1; i < allTr.length; i++) {
+            if (Number.isInteger(parseFloat(allTr[i].querySelectorAll("td")[position].innerText))) {
+                map.set(allTr[i].querySelectorAll("td")[position], parseFloat(allTr[i].querySelectorAll("td")[position].innerText));
+                continue;
+            }
+            map.set(allTr[i].querySelectorAll("td")[position], allTr[i].querySelectorAll("td")[position].innerText);
+        }
+        
+        let mapAsc = new Map([...map.entries()].sort());
+        console.log(mapAsc);
+        const table = document.querySelector("tbody");
+        for (let i = 1; i < document.querySelectorAll("tr").length; i++) {
+            document.querySelectorAll("tr")[i].remove();
+        }
+        for (let elem of mapAsc.keys()) {
+            table.append(elem.parentNode);
+        }
+        columnSort = true;
+        td.style.transform = "rotate(-90deg)";
+    } else {
+        let tempTr = document.querySelectorAll("tr");
+        for (let i = 1; i < tempTr.length; i++) {
+            tempTr[i].remove();
+        }
+        for (let i = 1; i < oldTr.length; i++) {
+            table.append(oldTr[i]);
+        }
+        columnSort = false;
+        td.style.transform = "rotate(0deg)";
+    }
+}
+/*-------------------------------------*/
+
 
 /*-------------------------------------*/
 const cancelButton = document.getElementById("cancel");
@@ -71,8 +124,8 @@ buttonChange.addEventListener('click', function() {
         for (let i = 0; i < allTr.length; i++) {
             let allTd = allTr[i].querySelectorAll('td');
             for (let j = 0; j < allTd.length; j++) {
-                let tdText = String(allTd[j].innerHTML).trim();
-                allTd[j].innerHTML = '';
+                let tdText = allTd[j].innerText;
+                allTd[j].innerText = '';
                 let tempInput = document.createElement('input');
                 tempInput.setAttribute('name', 'ourInput');
                 tempInput.value = tdText;
@@ -94,6 +147,7 @@ buttonChange.addEventListener('click', function() {
                 allTd[j].innerHTML = tdText;
             }
         }
+        createSort();
     }
 });
 /*-------------------------------------*/
@@ -113,8 +167,7 @@ resetButton.addEventListener('click', function() {
         let newTd = newTr[i].querySelectorAll("td");
         for (let j = oldTd.length; j < newTd.length; j++) {
             newTd[j].remove();  
-        }
-        
+        }   
     }
     agent.setAttribute('value', oldTr[0].querySelectorAll('td').length);
 });
@@ -281,8 +334,7 @@ function makeButtons(xCords, yCords, obj) {
 let squareAccess = 0;
 document.body.addEventListener('click', function(event) {
     let td = event.target;
-    
-    if (td.tagName == "BUTTON") {
+    if (td.tagName == "BUTTON" || td.closest("div").className == "arrow") {
         return;
     }
     if (td.closest("td") && access == 0) {
