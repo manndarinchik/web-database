@@ -126,10 +126,12 @@ buttonChange.addEventListener('click', function() {
             for (let j = 0; j < allTd.length; j++) {
                 let tdText = allTd[j].innerText;
                 allTd[j].innerText = '';
+                const tempP = document.createElement("p");
                 let tempInput = document.createElement('input');
                 tempInput.setAttribute('name', 'ourInput');
                 tempInput.value = tdText;
-                allTd[j].append(tempInput);     
+                tempP.append(tempInput);
+                allTd[j].append(tempP);     
             }
         agent.setAttribute('value', oldTr[0].querySelectorAll('td').length);
         }
@@ -142,9 +144,10 @@ buttonChange.addEventListener('click', function() {
         for (let i = 0; i < allTr.length; i++) {
             let allTd = allTr[i].querySelectorAll('td');
             for (let j = 0; j < allTd.length; j++) {
-                let tdText = String(allTd[j].childNodes[0].value).trim();
+                let tdText = String(allTd[j].childNodes[0].childNodes[0].value).trim();
                 allTd[j].childNodes[0].remove();
-                allTd[j].innerHTML = tdText;
+                allTd[j].append(document.createElement("p"));
+                allTd[j].childNodes[0].innerHTML = tdText;
             }
         }
         createSort();
@@ -339,6 +342,7 @@ document.body.addEventListener('click', function(event) {
     }
     if (td.closest("td") && access == 0) {
         if (squareAccess == 0 && access == 0) {
+            td = td.closest("td");
             td.style.transition = ".2s";
             td.classList.add("dark");
             activeGray = td;
