@@ -22,8 +22,8 @@
                         {% for i in table %}
                         <tr {% if forloop.counter == 1 %} class="table_head"{%else%}{%endif%}>
                             {% for j in i %}
-                            <td style="padding-top: 0; padding-bottom: 0;">
-                                {{ j }}
+                            <td class="table_element">
+                                <p>{{ j }} </p>
                             </td>{% endfor %} 
                         </tr>{% endfor %}
                     </table>
@@ -41,7 +41,7 @@
                 <div class="d-flex flex-row">
                     <div class="btn btn-warning" id="button_change" style="display: inline-block;">Изменить</div>
                     <div class="btn btn-secondary" id="resetButton" style="display: none;">Отменить изменения</div>
-                    <div class="btn btn-primary" id="justButton"    style="display: none;">Сохранить изменения</div>
+                    <button class="btn btn-primary" id="justButton"    style="display: none;">Сохранить изменения</button>
                     <input type="text" class='agent' name="agent">
                 </div>
                 {% endif %}

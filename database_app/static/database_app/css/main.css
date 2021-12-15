@@ -59,21 +59,8 @@ nav * {
 	}
 }
 
-td * {
-	padding: 7px;;
-}
-
-.table-bordered > :not(caption) > * > * {
-	padding: 0;
-}
-
 .wrapper {
 	min-height: 100%;
-	
-}
-
-td {
-    position: relative;
 }
 
 .table_head {
@@ -130,14 +117,18 @@ td {
 	font-weight: 800;
 	background-color: #dDD;
 }
+.table_element p{
+	margin: 0;
+	padding: 0.5rem;
+}
 tr {
 	height: 30px;
     position: relative;
 }
-
 td {
 	height: 30px;
 	min-width: 100px;
+	max-width: 300px;
 }
 
 tr:nth-child(even) {
