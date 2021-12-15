@@ -65,16 +65,45 @@ td * {
 	
 }
 
+td {
+    position: relative;
+}
+
+.table_head {
+    position: relative;
+}
+
+.table_head td {
+    position: relative;
+}
+
+.arrow {
+    position: absolute;
+    top: 12px;
+    right: 5px;
+    width: 0;
+	height: 0;
+	border-top: 5px solid transparent;
+	border-right: 10px solid rgb(44, 36, 36);
+	border-bottom: 5px solid transparent;
+}
+
 .content {
-	padding: 0 15px;
-	max-width: 335px;
+	margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+	max-width: 1280px;
 	width: 100%;
 	position: relative;
 }
 
-.table-responsive {
+/* .table-responsive {
 	display: flex;
-}
+    max-width: 1280px;
+	
+    overflow-x: auto !important;
+} */
 
 
 .addColumn {
@@ -96,6 +125,7 @@ td * {
 }
 tr {
 	height: 30px;
+    position: relative;
 }
 
 td {
@@ -115,7 +145,16 @@ td:nth-child(1) {
 
 td:nth-child(2) {
 	min-width: 150px;
-}	
+}
+
+#resetButton {
+	border: 1px solid #000;
+	border-radius: 5px;
+	display: none;
+	margin: 10px 0;
+	font-weight: 600;
+}
+
 .buttonsColumn {
     display: none;
 }
@@ -124,6 +163,11 @@ td:nth-child(2) {
 	display: none;
 }
 
+.dark {
+	transition: .2s;
+	background-color: gray !important;
+	position: relative;
+}
 
 .justButton {
     width: 100px;
@@ -134,4 +178,46 @@ td:nth-child(2) {
 
 .agent {
     display: none;
+}
+
+.choiceButton__wrapper {
+	width: 50px;
+	height: 20px;
+	position: absolute;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+}
+
+.addButton {
+	background-color: green;
+	height: 9px;
+	transition: .2s;
+}
+
+.deleteButton {
+	background-color: red;
+	height: 9px;
+	transition: .2s;
+}
+
+.choiceButtons__wrapper {
+	width: 50px;
+	height: 20px;
+	position: absolute;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+	transition: .2s;
+}
+
+.choiceButton {
+	width: inherit;
+	height: inherit;
+	background-color: green;
+	transition: .2s;
+}
+
+.hide {
+	display: none;
 }
