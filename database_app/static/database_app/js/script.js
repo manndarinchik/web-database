@@ -352,8 +352,12 @@ document.body.addEventListener('click', function(event) {
                          - document.querySelector(".content_container").offsetLeft
                          - td.offsetLeft 
                          - document.querySelector(".table-responsive").offsetLeft 
-                         + document.querySelector(".table-responsive").scrollLeft, event.clientY 
-                         - td.closest("tr").offsetTop, td);
+                         + document.querySelector(".table-responsive").scrollLeft,
+                          event.clientY 
+                         - td.closest("tr").offsetTop
+                         - document.getElementById("table_header").offsetHeight
+                         - document.getElementById("nav_card").offsetHeight,
+                           td);
             squareAccess += 1;
         } else {
             deleteStyles();

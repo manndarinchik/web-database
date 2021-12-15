@@ -3,17 +3,21 @@
 {% block content %}
 
     {% if perms.database_app.can_view %}
-    <h1>Таблица</h1>
-
-        <div class="input-group">
-            <input type="text" class="form-control" placeholder="Найти..." aria-label="Поиск по таблице" aria-describedby="search" id="input">
-            <button class="btn btn-outline-primary" type="button" id="search">Поиск</button>
-            <button class="btn btn-outline-danger" type="button" id="cancel">Отмена</button>
+    <div class="card" style="margin-top: 2rem; width: 100%;" id="table_card">
+        <div class="card-header" id="table_header">
+            <h1>Таблица</h1>
         </div>
 
-        <form action="" method="post" name="ourForm">
-            {% csrf_token %}
-            <div class="table-responsive">
+        <div class="card-body">
+            <div class="input-group">
+                <input type="text" class="form-control" placeholder="Найти..." aria-label="Поиск по таблице" aria-describedby="search" id="input">
+                <button class="btn btn-outline-primary" type="button" id="search">Поиск</button>
+                <button class="btn btn-outline-danger" type="button" id="cancel">Отмена</button>
+            </div>
+
+            <form action="" method="post" name="ourForm">
+                {% csrf_token %}
+                <div class="table-responsive">
                     <table id="main-table" class="table table-striped table-bordered">                        
                         {% for i in table %}
                         <tr {% if forloop.counter == 1 %} class="table_head"{%else%}{%endif%}>
@@ -23,27 +27,27 @@
                             </td>{% endfor %} 
                         </tr>{% endfor %}
                     </table>
-            </div>
-            <div class="buttonsColumn">
-                <button class="btn btn-outline-success" id="addColumn" type="button">+</button>
-                <button class="btn btn-outline-success" id="deleteColumn" type="button">-</button>
-            </div>
-            <div class="buttonsRow">
-                <button class="btn btn-outline-success" id="addRow" type="button">+</button>
-                <button class="btn btn-outline-success" id="deleteRow" type="button">-</button>
-            </div>
-    
-            {% if perms.database_app.can_edit %}
-            <div class="btn btn-outline-success" id="buttonRow" style="display: none;">+</div>
-            <br>
-            <button class="btn btn-secondary" type="button" id="resetButton" style="display: none;">Отменить изменения</button>
-            <br>
-            <div class="btn btn-warning" id="button_change" style="display: inline-block;">Изменить</div>
-            <br>
-            <input type="text" class='agent' name="agent">
-            <button class="btn btn-primary" id="justButton" style="display: none;">Сохранить изменения</button>
-            {% endif %}
+                </div>
+                {% comment %} <div class="buttonsColumn">
+                    <button class="btn btn-outline-success" id="addColumn" type="button">+</button>
+                    <button class="btn btn-outline-success" id="deleteColumn" type="button">-</button>
+                </div>
+                <div class="buttonsRow">
+                    <button class="btn btn-outline-success" id="addRow" type="button">+</button>
+                    <button class="btn btn-outline-success" id="deleteRow" type="button">-</button>
+                </div> {% endcomment %}
+        
+                {% if perms.database_app.can_edit %}
+                <div class="d-flex flex-row">
+                    <div class="btn btn-warning" id="button_change" style="display: inline-block;">Изменить</div>
+                    <div class="btn btn-secondary" id="resetButton" style="display: none;">Отменить изменения</div>
+                    <div class="btn btn-primary" id="justButton"    style="display: none;">Сохранить изменения</div>
+                    <input type="text" class='agent' name="agent">
+                </div>
+                {% endif %}
+            </form>
+        </div>
 
-        {% endif %}
-        </form>
+    </div>
+    {% endif %}
 {% endblock %}
