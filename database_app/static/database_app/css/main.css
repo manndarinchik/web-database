@@ -179,45 +179,39 @@ td:nth-child(2) {
 }
 
 .choiceButton__wrapper {
-	width: 50px;
-	height: 20px;
+	top: -25px;
+	height: 75px;
+	width: 25px;
+	padding: 0;
 	position: absolute;
 	display: flex;
 	flex-direction: column;
-	justify-content: space-between;
+	justify-content: center;
 }
 
 .addButton {
-	background-color: green;
-	height: 9px;
+	height: 25px;
+	width: 25px;
 	transition: .2s;
 }
 
 .deleteButton {
-	background-color: red;
-	height: 9px;
+	height: 25px;
+	width: 25px;
 	transition: .2s;
 }
 
-.choiceButtons__wrapper {
-	width: 50px;
-	height: 20px;
-	position: absolute;
-	display: flex;
-	flex-direction: column;
-	justify-content: space-between;
-	transition: .2s;
-}
 
 .choiceButton {
-	width: inherit;
-	height: inherit;
+	width: 25px;
+	height: 25px;
 	background-color: green;
 	transition: .2s;
+	padding: 0;
 }
 
 .hide {
-	display: none;
+	display: none !important;
 }
 
 #table_card .card-body{

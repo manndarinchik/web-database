@@ -203,21 +203,26 @@ submitButton.addEventListener('submit', function(e) {
 /*-------------------------------------*/
 function buttons() {
     const buttonWrapper = document.createElement("div");
-    const choiceButton = document.createElement("button");
-    const addButton = document.createElement("button");
-    const deleteButton = document.createElement("button");
-    const mas = [addButton, choiceButton, deleteButton];
+    buttonWrapper.classList.add("choiceButton__wrapper");
 
-    for (let i = 0; i < 3; i++) {
-        mas[i].setAttribute("type", "button");
-        buttonWrapper.append(mas[i]);
-        if (i % 2 == 0) {
-            mas[i].classList.add("hide")
-        } else {
-            mas[i].classList.add("choiceButton");
-        }
-    }
-    buttonWrapper.classList.add("choiceButton__wrapper")
+    const choiceButton = document.createElement("button");
+    choiceButton.classList.add('choiceButton', 'btn', 'btn-primary');
+    choiceButton.setAttribute("type", "button");
+    
+    const addButton = document.createElement("button");
+    addButton.classList.add('btn', 'btn-success');
+    addButton.setAttribute("type", "button");
+    addButton.innerHTML = "+"
+    addButton.style.display = "none";
+
+    const deleteButton = document.createElement("button");
+    deleteButton.classList.add( 'btn', 'btn-danger');
+    deleteButton.setAttribute("type", "button");
+    addButton.innerHTML = "-"
+    deleteButton.style.display = "none";
+
+    buttonWrapper.append(addButton, choiceButton, deleteButton);
+
     return buttonWrapper
 }
 
@@ -239,7 +244,15 @@ function toWrapper(ourWrapper) {
 
 function dualButton(wrapper) {
     for (let i = 0; i < 3; i++) {
-        wrapper.childNodes[i].classList.toggle("hide");
+        // wrapper.childNodes[i].classList.toggle("hide");
+        wrapper.childNodes[i].style.display = "inline-block";
+    }
+    // Убрать остальные кнопки после нажатия
+    let allButtons = document.querySelectorAll(".choiceButton__wrapper");
+    for (let i = 0; i < allButtons.length; ++i){
+        if (allButtons[i].classList[1] != wrapper.classList[1]) {
+            allButtons[i].classList.toggle("hide")
+        }
     }
 
     toWrapper(wrapper)
@@ -375,7 +388,7 @@ document.body.addEventListener('click', function(event) {
 
 function deleteStyles() {
     let allButtons = document.querySelectorAll(".choiceButton__wrapper");
-    for (let i = 0; i < 4; i++) {
+    for (let i = 0; i < allButtons.length; i++) {
         allButtons[i].remove();
     }
     activeGray.classList.remove("dark");
