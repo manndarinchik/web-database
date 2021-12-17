@@ -1,0 +1,20 @@
+{% extends 'base_generic.html' %}
+
+{% block content %}
+    <div>
+
+        {% if tables%}
+            {% for table in tables %}
+                {{table.nodes}}
+
+                <br>
+            {% endfor %}
+        {% else %}
+            <p>Таблиц нет</p>
+        {% endif%}
+
+        {{% tables%}}
+
+    </div>
+
+{% endblock %}
