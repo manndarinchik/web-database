@@ -29,12 +29,11 @@ def home(request):
         context.update({"user_group": "- отсутствует"})
     else:
         context.update({"user_group": user_groups[0].name})
+        
+
+    nodes = DataNode.objects.all()
 
 
-
-    # Вывод таблицы
-    #nodes = DataNode.objects.all()
-    nodes = table.nodes.all()
     # Вместо data_h и data_w теперь data_row (максимальное количество строк) и data_column (максимальное количество столбцов)
     def max_table(nodes):
         data_row = 0
@@ -45,7 +44,6 @@ def home(request):
             if entry.column_pos > data_column:
                 data_column = entry.column_pos
         return int(data_row) + 1, int(data_column) + 1
-
 
     # Найти границы таблицы
     # Вместо data_h и data_w теперь data_row (максимальное количество строк) и data_column (максимальное количество столбцов)
@@ -87,8 +85,8 @@ def home(request):
 
         for elem in values:
             try:
-                DataNode.objects.get(row_pos=row, column_pos=col)
-                obj = DataNode.objects.get(row_pos=row, column_pos=col)
+                DataNode.objects.get(row_pos=str(row), column_pos=str(col))
+                obj = DataNode.objects.get(row_pos=str(row), column_pos=str(col))
                 obj.data = elem
                 obj.save()
 
@@ -97,7 +95,7 @@ def home(request):
                 #newNode.save()
 
                 #print(newNode)
-                table.nodes.add(DataNode.objects.create(row_pos=row, column_pos=col, data=elem))
+                table.nodes.add(DataNode.objects.create(row_pos=str(row), column_pos=str(col), data=elem))
 
 
             if (col == max_col - 1):
@@ -161,19 +159,18 @@ def signup(request):
         form = SignUpForm(request.POST)
         if form.is_valid():
             user = form.save()
-            user.refresh_from_db()
+            user.refresh_from_db()  
 
             user.save()
             raw_password = form.cleaned_data.get('password1')
-
+ 
             user = authenticate(username=user.username, password=raw_password)
             login(request, user)
-
+ 
             return redirect('/')
     else:
         form = SignUpForm()
     return render(request, 'registration/signup.html', {'form': form})
-
 
 def admin(req):
     if req.method == 'POST':
@@ -182,7 +179,7 @@ def admin(req):
         if form.is_valid():
             user = User.objects.get(id=req.POST['user'])
             permissions = req.POST['permissions']
-
+            
             g = user.groups.all()
             if len(g):
                 g[0].user_set.remove(user)
@@ -190,7 +187,7 @@ def admin(req):
 
             if permissions != '0':
                 new_group = Group.objects.get(id=permissions)
-
+                                
                 print(permissions, new_group)
                 new_group.user_set.add(user)
                 user.groups.set([new_group])
@@ -199,17 +196,17 @@ def admin(req):
 
             return render(req, 'database_app/admin.html', {
                 'form': form,
-                'changed': True,
+                'changed': True, 
                 'changed_user': user.username,
                 'changed_perm': permissions
             })
-
+            
     else:
         form = ChangePermissionsform()
 
     return render(req, 'database_app/admin.html', {'form': form,  'changed': False})
 
-
+@login_required
 def alltables(request):
     tables = DataTable.objects.all()
     context = {

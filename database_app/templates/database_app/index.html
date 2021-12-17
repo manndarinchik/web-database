@@ -1,60 +1,53 @@
 {% extends 'base_generic.html' %}
 
 {% block content %}
-    <p>{{user.username}} (группа {{user_group}})</p>
-    <p><a href="{% url 'logout' %}">Выйти</a></p>
-
-    {% if no_permissions %}
-    <p>Обратитесь у администратору для получения доступа. </p>
-    {% endif %}
 
     {% if perms.database_app.can_view %}
+    <div class="card" style="margin-top: 2rem; width: 100%;" id="table_card">
+        <div class="card-header" id="table_header">
+            <h1>Таблица</h1>
+        </div>
 
-    {% if user_group == "admins" %}
-    <p><a href="{% url 'admin' %}">Администрация</a></p>
-    <p><a href="{% url 'alltables' %}">Все таблицы</a></p>
-    {% endif %}
-    <h1>Таблица:</h1>
-    <h2>{{name}}</h2>
-       <section class="table__search">
-            <input type="text" placeholder="Найти..." id="input">
-            <button id="cancel">Отмена</button>
-            <button id="search">Поиск</button>
-        </section>
-        <form action="" method="post" name="ourForm">
-            {% csrf_token %}
-            <div class="table-responsive">
+        <div class="card-body">
+            <div class="input-group">
+                <input type="text" class="form-control" placeholder="Найти..." aria-label="Поиск по таблице" aria-describedby="search" id="input">
+                <button class="btn btn-outline-primary" type="button" id="search">Поиск</button>
+                <button class="btn btn-outline-danger" type="button" id="cancel">Отмена</button>
+            </div>
+
+            <form action="" method="post" name="ourForm">
+                {% csrf_token %}
+                <div class="table-responsive">
                     <table id="main-table" class="table table-striped table-bordered">                        
                         {% for i in table %}
                         <tr {% if forloop.counter == 1 %} class="table_head"{%else%}{%endif%}>
                             {% for j in i %}
-                            <td>
-                                <p class="table-element">{{ j }}</p>
+                            <td class="table_element">
+                                <p>{{ j }} </p>
                             </td>{% endfor %} 
                         </tr>{% endfor %}
                     </table>
-            </div>
-            <div class="buttonsColumn">
-                <button class="btn btn-outline-success" id="addColumn" type="button">+</button>
-                <button class="btn btn-outline-success" id="deleteColumn" type="button">-</button>
-            </div>
-            <div class="buttonsRow">
-                <button class="btn btn-outline-success" id="addRow" type="button">+</button>
-                <button class="btn btn-outline-success" id="deleteRow" type="button">-</button>
-            </div>
-    
-            {% if perms.database_app.can_edit %}
-            <div class="btn btn-outline-success" id="buttonRow" style="display: none;">+</div>
-            <br>
-            <div class="btn btn-warning" id="button_change" style="display: inline-block;">Изменить</div>
+                </div>
+                {% comment %} <div class="buttonsColumn">
+                    <button class="btn btn-outline-success" id="addColumn" type="button">+</button>
+                    <button class="btn btn-outline-success" id="deleteColumn" type="button">-</button>
+                </div>
+                <div class="buttonsRow">
+                    <button class="btn btn-outline-success" id="addRow" type="button">+</button>
+                    <button class="btn btn-outline-success" id="deleteRow" type="button">-</button>
+                </div> {% endcomment %}
+        
+                {% if perms.database_app.can_edit %}
+                <div class="d-flex flex-row">
+                    <div class="btn btn-warning" id="button_change" style="display: inline-block;">Изменить</div>
+                    <div class="btn btn-secondary" id="resetButton" style="display: none;">Отменить изменения</div>
+                    <button class="btn btn-primary" id="justButton"    style="display: none;">Сохранить изменения</button>
+                    <input type="text" class='agent' name="agent">
+                </div>
+                {% endif %}
+            </form>
+        </div>
 
-            <button type="button" id="resetButton" style="display: none;">Отменить изменения</button>
-            <br>
-            <input type="text" class='agent' name="agent">
-            <button class="btn btn-primary" id="justButton" style="display: none;">Сохранить изменения</button>
-            {% endif %}
-
-            {% endif %}
-        </form>
-        <div class="btn btn-dangerg">Удалить</div>
+    </div>
+    {% endif %}
 {% endblock %}

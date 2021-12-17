@@ -2,23 +2,6 @@
 
 {% block content %}
     <div>
-        <p>{{user.username}} (группа {{user_group}})</p>
-        <p><a href="{% url 'logout' %}">Выйти</a></p>
-
-        {% if no_permissions %}
-        <p>Обратитесь у администратору для получения доступа. </p>
-        {% endif %}
-
-        {% if perms.database_app.can_view %}
-
-            {% if user_group == "admins" %}
-                <p><a href="{% url 'admin' %}">Администрация</a></p>
-                <p><a href="{% url 'alltables' %}">Все таблицы</a></p>
-            {% endif %}
-        {% endif %}
-    </div>
-    <div>
-
         {% if tables%}
             {% for table in tables %}
 
