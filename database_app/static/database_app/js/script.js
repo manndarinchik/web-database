@@ -40,26 +40,38 @@ function createSort() {
 
 
 /*---------Осторожно, говнокод---------*/
-let columnSort = false;
+
 function sortColumn(td) {
     const table = document.querySelector("tbody");
-    if (!columnSort) {
+    const allArrows = document.querySelectorAll(".arrow");
+    for (let i = 0; i < allArrows.length; i++) {
+        if (td == allArrows[i]) continue;
+        if (allArrows[i].classList.contains("active")) allArrows[i].classList.remove("active");
+    }
+    if (!td.classList.contains("active")) {
         let oldTr = document.querySelectorAll("tr");
         let allTr = document.querySelectorAll("tr");
         let position = getPosTd(td.parentNode);
         let masTd = [];
         let masWords = [];
+        td.classList.add("active");
         let map = new Map();
-        for (let i = 1; i < allTr.length; i++) {
-            if (Number.isInteger(parseFloat(allTr[i].querySelectorAll("td")[position].innerText))) {
+        if (!isNaN(parseFloat(allTr[1].querySelectorAll("td")[position].innerText))) {
+            
+            for (let i = 1; i < allTr.length; i++) {
                 map.set(allTr[i].querySelectorAll("td")[position], parseFloat(allTr[i].querySelectorAll("td")[position].innerText));
-                continue;
             }
-            map.set(allTr[i].querySelectorAll("td")[position], allTr[i].querySelectorAll("td")[position].innerText);
+            mapAsc = new Map([...map.entries()].sort((a, b) => a[1] - b[1]));
+        } else {
+
+            for (let i = 1; i < allTr.length; i++) {
+                map.set(allTr[i].querySelectorAll("td")[position], allTr[i].querySelectorAll("td")[position].innerText);
+            }
+            mapAsc = new Map([...map.entries()].sort());
+            
         }
         
-        let mapAsc = new Map([...map.entries()].sort());
-        console.log(mapAsc);
+        
         const table = document.querySelector("tbody");
         for (let i = 1; i < document.querySelectorAll("tr").length; i++) {
             document.querySelectorAll("tr")[i].remove();
@@ -67,18 +79,18 @@ function sortColumn(td) {
         for (let elem of mapAsc.keys()) {
             table.append(elem.parentNode);
         }
-        columnSort = true;
-        td.style.transform = "rotate(-90deg)";
-    } else {
+        
+    }
+    else {
         let tempTr = document.querySelectorAll("tr");
         for (let i = 1; i < tempTr.length; i++) {
             tempTr[i].remove();
         }
+        td.classList.remove("active");
         for (let i = 1; i < oldTr.length; i++) {
             table.append(oldTr[i]);
         }
-        columnSort = false;
-        td.style.transform = "rotate(0deg)";
+        
     }
 }
 /*-------------------------------------*/
@@ -191,7 +203,8 @@ submitButton.addEventListener('submit', function(e) {
 });
 /*-------------------------------------*/
 
-
+const buttonWidth = 50;
+const buttonHeight = 20;
 /*-------------------------------------*/
 function buttons() {
     const buttonWrapper = document.createElement("div");
@@ -210,6 +223,8 @@ function buttons() {
         }
     }
     buttonWrapper.classList.add("choiceButton__wrapper")
+    buttonWrapper.style.width = `${buttonWidth}px`;
+    buttonWrapper.style.height = `${buttonHeight}px`
     return buttonWrapper
 }
 
@@ -279,7 +294,7 @@ function show(obj) {
     const allTr = document.querySelectorAll("tr");
     function showRL(side) {
         const position = getPosTd(obj.closest("td"));
-        console.log(position);
+        
         for (let i = 0; i < allTr.length; i++) {
             let ourTd = allTr[i].querySelectorAll("td")[position];
             let newTd = document.createElement("td");
@@ -312,14 +327,20 @@ function show(obj) {
     }
 }
 
-function makeButtons(xCords, yCords, obj) {
+function makeButtons(xCords, yCords, obj, xPos, yPos) {
     // Справа xCords + 15; yCords - 10
     // Слева xCords - 65; yCords - 10
     // Сверху xCords - 25; yCords - 35
     // Снизу xCords - 25; yCords + 15
-    x = [xCords + 15, xCords - 65, xCords - 25, xCords - 25];
-    y = [yCords - 10, yCords - 10, yCords - 35, yCords + 15];
-    pos = ["right", "left", "top", "bottom"];
+    
+    if (xPos - document.querySelector(".content").offsetLeft - document.querySelector(".table-responsive").offsetLeft < buttonWidth + 15) xCords = buttonWidth + 15;
+    if (yPos - document.querySelector(".table-responsive").offsetTop < buttonHeight + 15) yCords = buttonHeight + 15;
+    //console.log(xPos - document.querySelector(".content").offsetLeft - document.querySelector(".table-responsive").offsetLeft)
+    if (xPos - document.querySelector(".content").offsetLeft - document.querySelector(".table-responsive").offsetLeft + buttonWidth + 15 > document.querySelector(".table-responsive").offsetWidth) xCords = obj.offsetWidth - 1 - buttonWidth - 15;
+    if (yPos - document.querySelector(".table-responsive").offsetTop + buttonHeight + 10 > document.querySelector(".table-responsive").offsetHeight) yCords = obj.offsetHeight - buttonHeight - 15 - 1;
+    const x = [xCords + 15, xCords - buttonWidth - 15, xCords - buttonWidth / 2, xCords - buttonWidth / 2];
+    const y = [yCords - buttonHeight / 2, yCords - buttonHeight / 2, yCords - buttonHeight - 15, yCords + 15];
+    const pos = ["right", "left", "top", "bottom"];
     for (let i = 0; i < 4; i++) {
         
         let button = buttons();
@@ -346,7 +367,7 @@ document.body.addEventListener('click', function(event) {
             td.style.transition = ".2s";
             td.classList.add("dark");
             activeGray = td;
-            makeButtons(event.clientX - document.querySelector(".content").offsetLeft - td.offsetLeft - document.querySelector(".table-responsive").offsetLeft + document.querySelector(".table-responsive").scrollLeft, event.clientY - td.closest("tr").offsetTop, td);
+            makeButtons(event.clientX - document.querySelector(".content").offsetLeft - td.offsetLeft - document.querySelector(".table-responsive").offsetLeft + document.querySelector(".table-responsive").scrollLeft, event.clientY - td.parentNode.offsetTop, td, event.clientX, event.clientY);
             squareAccess += 1;
         } else {
             deleteStyles();

@@ -71,6 +71,10 @@ td {
 	border-bottom: 5px solid transparent;
 }
 
+.active {
+    transform: rotate(-90deg);
+}
+
 .content {
 	margin: 0 auto;
     display: flex;
@@ -112,7 +116,7 @@ td {
 .table-responsive {
 	display: flex;
     max-width: 1280px;
-	
+	margin-bottom: 14px;
     overflow-x: auto !important;
 }
 
@@ -138,6 +142,10 @@ td.table__header {
 tr {
 	height: 30px;
     position: relative;
+}
+
+.table {
+    margin-bottom: 0 !important;
 }
 
 td {
@@ -200,8 +208,6 @@ input {
 }
 
 .choiceButton__wrapper {
-	width: 50px;
-	height: 20px;
 	position: absolute;
 	display: flex;
 	flex-direction: column;
