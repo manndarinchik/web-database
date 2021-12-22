@@ -19,9 +19,9 @@ class ChangePermissionsform(forms.Form):
         label="Уровень доступа",
         widget=forms.RadioSelect,
         choices=[
-            ('0', 'Без доступа'),
-            ('3', 'Наблюдатель'),
-            ('2', 'Редактор'),
-            ('1', 'Администратор')
+            ('no perms', 'Без доступа'),
+            ('observers', 'Наблюдатель'),
+            ('contributors', 'Редактор'),
+            ('admins', 'Администратор')
         ]
     )

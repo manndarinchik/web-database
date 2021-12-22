@@ -185,14 +185,10 @@ def admin(req):
                 g[0].user_set.remove(user)
                 user.groups.clear()
 
-            if permissions != '0':
-                new_group = Group.objects.get(id=permissions)
-                                
-                print(permissions, new_group)
+            if permissions != 'no perms':
+                new_group = Group.objects.get(name=permissions)
                 new_group.user_set.add(user)
                 user.groups.set([new_group])
-
-            print(user.groups.all())
 
             return render(req, 'database_app/admin.html', {
                 'form': form,
