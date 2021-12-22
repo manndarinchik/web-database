@@ -391,7 +391,7 @@ document.body.addEventListener('click', function(event) {
     if (td.tagName == "BUTTON" || td.closest("div").className == "arrow") {
         return;
     }
-    if (td.closest("td") && access == 0) {
+    if (td.closest("td") && access == 0 && td.closest("tr").className != "table_head") {
         if (squareAccess == 0 && access == 0) {
             td = td.closest("td");
             td.style.transition = ".2s";
