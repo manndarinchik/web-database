@@ -1,12 +1,11 @@
 {% extends 'base_generic.html' %}
-{% block title%}<title>{{name}}</title>{%endblock%}
 
 {% block content %}
 
     {% if perms.database_app.can_view %}
     <div class="card" style="margin-top: 2rem; width: 100%;" id="table_card">
         <div class="card-header" id="table_header">
-            <h1>{{name}}</h1>
+            <h1>Таблица: {{name}}</h1>
         </div>
 
         <div class="card-body">
@@ -44,7 +43,9 @@
                     <div class="btn btn-secondary" id="resetButton" style="display: none;">Отменить изменения</div>
                     <button class="btn btn-primary" id="justButton"    style="display: none;">Сохранить изменения</button>
                     <input type="text" class='agent' name="agent">
+                    <a href="{% url 'deletetable' %}?table_id={{id}}" class="btn btn-danger" style="display: inline-block;">Удалить таблицу</a>
                 </div>
+
                 {% endif %}
             </form>
         </div>

@@ -1,19 +1,21 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
-from .models import DataNode, DataTable
-from .forms import SignUpForm, ChangePermissionsform
 from django.contrib.auth.models import User, Group
-from django.contrib.auth.decorators import login_required, permission_required
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate, login
+
+from .models import DataNode, DataTable
+from .forms import SignUpForm, ChangePermissionsform, DataTableForms
 
 
 @login_required
 def home(request):
     #получение таблицы
     name_table = request.GET.get('table')
-    #tables = DataTable.objects.filter(name=name_table)
     table = DataTable.objects.get(name=name_table)
     name = table.name
+    id_table = table.id
+    nodes = table.nodes.all()
 
     #return render(request, 'database_app/rab.html', {'tables': rab})
     # администрирование
@@ -21,6 +23,7 @@ def home(request):
         "user": request.user,
         "no_permissions": False,
         "name": name,
+        "id": id_table,
     }
 
     user_groups = request.user.groups.all()
@@ -29,9 +32,6 @@ def home(request):
         context.update({"user_group": "- отсутствует"})
     else:
         context.update({"user_group": user_groups[0].name})
-        
-
-    nodes = DataNode.objects.all()
 
 
     # Вместо data_h и data_w теперь data_row (максимальное количество строк) и data_column (максимальное количество столбцов)
@@ -67,7 +67,6 @@ def home(request):
         max_col = int(request.POST['agent'])
 
         values = request.POST.getlist('ourInput')
-        #print(values, len(values))
         max_row = int(len(values) / max_col)
         all_row, all_column = max_table(nodes)
 
@@ -91,10 +90,6 @@ def home(request):
                 obj.save()
 
             except:
-                #newNode =
-                #newNode.save()
-
-                #print(newNode)
                 table.nodes.add(DataNode.objects.create(row_pos=str(row), column_pos=str(col), data=elem))
 
 
@@ -172,6 +167,7 @@ def signup(request):
         form = SignUpForm()
     return render(request, 'registration/signup.html', {'form': form})
 
+
 def admin(req):
     if req.method == 'POST':
 
@@ -209,8 +205,9 @@ def admin(req):
                                                   "user_group": req.user.groups.all()[0].name,
                                                   "no_permissions": False})
 
+
 @login_required
-def alltables(request):
+def all_tables(request):
     tables = DataTable.objects.all()
     context = {
         "user": request.user,
@@ -219,6 +216,50 @@ def alltables(request):
         "user_group": request.user.groups.all()[0].name,
     }
     return render(request, 'database_app/alltables.html', context)
+
+
+def create_table(request):
+    if request.method == "POST":
+        name_table = request.POST["name"]
+        if name_table != "":
+            try:
+                table = DataTable.objects.get(name=name_table)
+                context = {
+                    "form": DataTableForms(),
+                    "error": "Такая таблица уже существует"
+                }
+                return render(request, "database_app/createtable.html", context)
+
+            except:
+                new_table = DataTable.objects.create(name=name_table)
+                for i in range(2):
+                    if i == 0:
+                        text = "Столбец "
+                    else:
+                        text = "Ячейка "
+                    for j in range(2):
+                        node = DataNode.objects.create(data=text+str(j+1), row_pos=i, column_pos=j)
+                        new_table.nodes.add(node)
+                new_table.save()
+                return redirect("alltables")
+    else:
+        context = {
+            "form": DataTableForms(),
+            "error": ""
+        }
+        return render(request, "database_app/createtable.html", context)
+
+
+def delete_table(request):
+    table_id = request.GET.get("table_id")
+    table = DataTable.objects.get(pk=table_id)
+    if request.method == "POST":
+        for node in table.nodes.all():
+            node.delete()
+        table.delete()
+        return redirect("alltables")
+    else:
+        return render(request, "database_app/deletetable.html", {"table": table})
 
 
 
