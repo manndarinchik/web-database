@@ -77,18 +77,18 @@ def home(request):
         if (all_row > max_row):
             for i in range(max_row, all_row):
                 for j in range(all_column):
-                    DataNode.objects.get(row_pos=i, column_pos=j).delete()
+                    table.nodes.get(row_pos=i, column_pos=j).delete()
                 all_row -= 1
 
         if (max_col - 1 < all_column):
             for i in range(max_col, all_column):
                 for j in range(all_row):
-                    DataNode.objects.get(row_pos=j, column_pos=i).delete()
+                    table.nodes.get(row_pos=j, column_pos=i).delete()
 
         for elem in values:
             try:
-                DataNode.objects.get(row_pos=str(row), column_pos=str(col))
-                obj = DataNode.objects.get(row_pos=str(row), column_pos=str(col))
+                table.nodes.get(row_pos=str(row), column_pos=str(col))
+                obj = table.nodes.get(row_pos=str(row), column_pos=str(col))
                 obj.data = elem
                 obj.save()
 
@@ -105,52 +105,6 @@ def home(request):
         return redirect(san)
 
     return render(request, 'database_app/index.html', context)
-
-@login_required
-def recieve_table(req, data, table_id):
-    # Принимаемые данные - двумерный массив строк.
-
-    table = DataTable.objects.get(table_id)
-
-    for i in range(len(data)):
-        for j in range(len(data[0])):
-            # Пробуем взять нод по адресу
-            node = DataNode.objects.get(row_pos = i, column_pos = j)
-            if node:
-                # Если нод существует, то перезаписать в нем данные 
-                if node.data != data[i][j]:
-                    node.data = data[i][j]
-                    node.save()
-            else:
-                # Если нод не существует, то создать нод и добавить его в таблицу
-                node = DataNode(data=data, row_pos=i, column_pos=j)
-                node.save()
-                table.nodes.add(node)
-
-    # Удаление лишних данных
-    for node in table.nodes.order_by('-row_pos'):
-        # Сортируем все ноды в таблице по индексу положения в строчке по убыванию. Если индекс больше длинны
-        # строк полученной от пользователя таблицы - нод удаляется.
-        if node.row_pos >= len(data[0]):
-            table.nodes.remove(node)
-            node.delete()
-        else:
-            break
-    for node in table.nodes.order_by('-column_pos'):
-        # Сортируем все ноды в таблице по индексу положения в столбце по убыванию. Если индекс больше длинны
-        # столбцев полученной от пользователя таблицы - нод удаляется.
-        if node.column_pos >= len(data):
-            table.nodes.remove(node)
-            node.delete()
-        else:
-            break
-
-
-    # Сохранить изменения в таблице
-    table.save()
-
-    return HttpResponse('')
-
 
 def signup(request):
     if request.method == 'POST':
