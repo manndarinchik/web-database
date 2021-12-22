@@ -191,6 +191,9 @@ def admin(req):
                 user.groups.set([new_group])
 
             return render(req, 'database_app/admin.html', {
+                "user": req.user,
+                "no_permissions": False,
+                "user_group": req.user.groups.all()[0].name,
                 'form': form,
                 'changed': True, 
                 'changed_user': user.username,
@@ -200,7 +203,11 @@ def admin(req):
     else:
         form = ChangePermissionsform()
 
-    return render(req, 'database_app/admin.html', {'form': form,  'changed': False})
+    return render(req, 'database_app/admin.html', {'form': form,
+                                                  'changed': False,
+                                                  "user": req.user, 
+                                                  "user_group": req.user.groups.all()[0].name,
+                                                  "no_permissions": False})
 
 @login_required
 def alltables(request):
@@ -209,14 +216,8 @@ def alltables(request):
         "user": request.user,
         "no_permissions": False,
         "tables": tables,
+        "user_group": request.user.groups.all()[0].name,
     }
-
-    user_groups = request.user.groups.all()
-    if not len(user_groups):
-        context.update({"no_permissions": True})
-        context.update({"user_group": "- отсутствует"})
-    else:
-        context.update({"user_group": user_groups[0].name})
     return render(request, 'database_app/alltables.html', context)
 
 
