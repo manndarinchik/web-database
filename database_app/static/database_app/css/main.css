@@ -230,3 +230,7 @@ td:nth-child(2) {
 #table_card .card-body{
 	padding: 0;
 }
+
+.list-group-container{
+	margin: 1rem;
+}

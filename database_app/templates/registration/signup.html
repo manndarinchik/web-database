@@ -1,24 +1,29 @@
-{% extends "base_generic.html" %}
+{% extends 'base_generic.html' %}
+{% block title%}<title>Регистрация</title>{%endblock%}
 
 {% block content %}
-<div class="container-sm">
-  <h2>Зарегистрироваться</h2>
-
-  <form method="post">
-    {% csrf_token %}
-    {% for field in form %}
-      <p>
-        {{ field.label_tag }}<br>
-        {{ field }}
-        {% if field.help_text %}
-          <small style="color: grey">{{ field.help_text }}</small>
-        {% endif %}
-        {% for error in field.errors %}
-          <p style="color: red">{{ error }}</p>
-        {% endfor %}
-      </p>
-    {% endfor %}
-    <button type="submit">Зарегистрироваться</button>
-  </form>
+<div class="card" style="margin-top: 2rem; width: 100%;">
+  <div class="card-header">
+      <h3 class="card-title">Регистрация</h3>
+  </div>
+  <div class="card-body">
+    <form method="post">
+      {% csrf_token %}
+      {% for field in form %}
+        <div class="input-group mb-3">
+          {{ field.label_tag }}
+          <div class="form-control">{{ field }}</div>
+        </div>
+          {% if field.help_text %}
+            <small style="color: grey">{{ field.help_text }}</small>
+          {% endif %}
+          {% for error in field.errors %}
+            <p style="color: red">{{ error }}</p>
+          {% endfor %}
+        </p>
+      {% endfor %}
+      <button class="btn btn-outline-primary me-2" type="submit">Зарегистрироваться</button>
+    </form>
+  </div>
 </div>
 {% endblock %}

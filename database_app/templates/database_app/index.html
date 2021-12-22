@@ -1,11 +1,12 @@
 {% extends 'base_generic.html' %}
+{% block title%}<title>{{name}}</title>{%endblock%}
 
 {% block content %}
 
     {% if perms.database_app.can_view %}
     <div class="card" style="margin-top: 2rem; width: 100%;" id="table_card">
         <div class="card-header" id="table_header">
-            <h1>Таблица</h1>
+            <h1>{{name}}</h1>
         </div>
 
         <div class="card-body">

@@ -1,34 +1,40 @@
 {% extends 'base_generic.html' %}
+{% block title%}<title>Вход</title>{%endblock%}
 
 {% block content %}
-  <div class="container-sm">
-    {% if form.errors %}
-      <p>Логин и пароль не совпадают. Пожалуйста, попробуйте еще раз.</p>
-    {% endif %}
-
-    {% if next %}
-      {% if user.is_authenticated %}
-        <p>У вас нет доступа к этой странице.</p>
-      {% else %}
-        <p>Войдите чтобы продолжить.</p>
-      {% endif %}
-    {% endif %}
-
-    <form action="{% url 'login' %}" method="post" name="auth">
-      {% csrf_token %}
-      <div class="mb-3">
-        {{ form.username.label_tag }}
-        {{ form.username }}
-      </div>
-      <div class="mb-3">
-        {{ form.password.label_tag }}
-        {{ form.password }}
-      </div>
-      <input type="submit" value="login" />
-      <input type="hidden" name="next" value="{{ next }}" />
-    </form>
-
-    {% comment %} <p><a href="{% url 'password_reset' %}">Забыли пароль?</a></p> {% endcomment %}
-    <p><a href="{% url 'signup' %}">Зарегистрировать аккаунт.</a></p>
+<div class="card" style="margin-top: 2rem; width: 100%;">
+  <div class="card-header">
+      <h3 class="card-title">Вход</h3>
   </div>
+    <div class="card-body">
+      {% if form.errors %}
+        <p>Логин и пароль не совпадают. Пожалуйста, попробуйте еще раз.</p>
+      {% endif %}
+
+      {% if next %}
+        {% if user.is_authenticated %}
+          <p>У вас нет доступа к этой странице.</p>
+        {% else %}
+          <p> Войдите чтобы продолжить.</p>
+        {% endif %}
+      {% endif %}
+
+      <form action="{% url 'login' %}" method="post" name="auth">
+        {% csrf_token %}
+        <div class="input-group mb-3">
+          {{ form.username.label_tag }}
+          <div class="form-control">{{ form.username }}</div>
+        </div>
+        <div class="input-group mb-3">
+          {{ form.password.label_tag }}
+          <div class="form-control">{{ form.password }}</div>
+        </div>
+        <input class="btn btn-outline-primary me-2" type="submit" value="Войти" />
+        <a class="btn btn-outline-danger me-2" href="{% url 'signup' %}">Зарегистрировать аккаунт</a>
+        <input type="hidden" name="next" value="{{ next }}" />
+      </form>
+
+      {% comment %} <p><a href="{% url 'password_reset' %}">Забыли пароль?</a></p> {% endcomment %}
+    </div>
+</div>
 {% endblock %}

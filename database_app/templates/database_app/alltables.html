@@ -1,18 +1,28 @@
 {% extends 'base_generic.html' %}
+{% block title%}<title>Список таблиц</title>{%endblock%}
 
 {% block content %}
-    <div>
-        {% if tables%}
-            {% for table in tables %}
+{% if perms.database_app.can_view %}    
+<div class="card" style="margin-top: 2rem; width: 100%;" id="table_card">
+    <div class="card-header" id="table_header">
+        <h2>Все таблицы</h2>
+    </div>
 
-                <a href=" {% url 'index' %}?table={{table}}">{{table.name}}</a><br>
+    <div class="card-body">
+        {% if tables%}
+        <div class="list-group list-group-container">
+            {% for table in tables %}
+                <a class="list-group-item list-group-item-action" href=" {% url 'index' %}?table={{table}}">{{table.name}}</a><br>
             {% endfor %}
+        </div>
         {% else %}
             <p>Таблиц нет</p>
         {% endif%}
-    </div>
-    <div>
-        <button type="button" class="btn btn-warning">Добавить таблицу</button>
+        <div>
+            <button type="button" class="btn btn-warning">Добавить таблицу</button>
+        </div>
     </div>
 
+</div>
+{% endif %}
 {% endblock %}
