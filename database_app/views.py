@@ -2,7 +2,7 @@ from typing import ContextManager
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from django.contrib.auth.models import User, Group
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, permission_required
 from django.contrib.auth import authenticate, login
 
 from .models import DataNode, DataTable
@@ -174,7 +174,7 @@ def signup(request):
 def admin(req):
     if req.user.groups.all()[0].name == "admins":
         if req.method == 'POST':
-
+            context = get_base_context(req.user)
             form = ChangePermissionsform(req.POST)
             if form.is_valid():
                 user = User.objects.get(id=req.POST['user'])
@@ -190,15 +190,13 @@ def admin(req):
                     new_group.user_set.add(user)
                     user.groups.set([new_group])
 
-                return render(req, 'database_app/admin.html', {
-                    "user": req.user,
-                    "no_permissions": False,
-                    "user_group": req.user.groups.all()[0].name,
+                context.update({
                     'form': form,
                     'changed': True, 
                     'changed_user': user.username,
                     'changed_perm': permissions
                 })
+                return render(req, 'database_app/admin.html', context)
                 
         else:
             form = ChangePermissionsform()
