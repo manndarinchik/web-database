@@ -49,14 +49,17 @@
                 </div>
             </nav>
         </div>  
-
-    {% endif %}
+        {% endif %}
     
         {% if no_permissions %}
-        <p>Обратитесь у администратору для получения доступа. </p>
+        <div class="card" style="margin-top: 2rem; width: 100%;">
+            <div class="card-body">
+            <h3>Обратитесь к администратору для получения доступа. </h3>
+            </div>
+        </div>
+        {%else%}
+            {% block content %}{% endblock %}
         {% endif %}
-
-        {% block content %}{% endblock %}
     </div>
 
     <script src="{% static 'database_app/js/script.js' %}"></script>

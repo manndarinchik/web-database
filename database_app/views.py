@@ -1,3 +1,4 @@
+from typing import ContextManager
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from django.contrib.auth.models import User, Group
@@ -7,31 +8,33 @@ from django.contrib.auth import authenticate, login
 from .models import DataNode, DataTable
 from .forms import SignUpForm, ChangePermissionsform, DataTableForms
 
+def get_base_context(user):
+    context = {
+        "user": user,
+        "no_permissions": False
+    }
+    user_groups = user.groups.all()
+    if not len(user_groups):
+        context.update({"no_permissions": True})
+        context.update({"user_group": "- отсутствует"})
+    else:
+        context.update({"user_group": user_groups[0].name})
+    return context
 
 @login_required
 def home(request):
     #получение таблицы
     name_table = request.GET.get('table')
     table = DataTable.objects.get(name=name_table)
-    name = table.name
-    id_table = table.id
+    context = get_base_context(request.user)
+    context.update({
+        "name": table.name,
+        "id": table.id
+    })
     nodes = table.nodes.all()
 
     #return render(request, 'database_app/rab.html', {'tables': rab})
     # администрирование
-    context = {
-        "user": request.user,
-        "no_permissions": False,
-        "name": name,
-        "id": id_table,
-    }
-
-    user_groups = request.user.groups.all()
-    if not len(user_groups):
-        context.update({"no_permissions": True})
-        context.update({"user_group": "- отсутствует"})
-    else:
-        context.update({"user_group": user_groups[0].name})
 
 
     # Вместо data_h и data_w теперь data_row (максимальное количество строк) и data_column (максимальное количество столбцов)
@@ -103,7 +106,7 @@ def home(request):
 
     return render(request, 'database_app/index.html', context)
 
-
+@login_required
 def recieve_table(req, data, table_id):
     # Принимаемые данные - двумерный массив строк.
 
@@ -167,106 +170,105 @@ def signup(request):
         form = SignUpForm()
     return render(request, 'registration/signup.html', {'form': form})
 
-
+@login_required
 def admin(req):
-    if req.method == 'POST':
+    if req.user.groups.all()[0].name == "admins":
+        if req.method == 'POST':
 
-        form = ChangePermissionsform(req.POST)
-        if form.is_valid():
-            user = User.objects.get(id=req.POST['user'])
-            permissions = req.POST['permissions']
-            
-            g = user.groups.all()
-            if len(g):
-                g[0].user_set.remove(user)
-                user.groups.clear()
+            form = ChangePermissionsform(req.POST)
+            if form.is_valid():
+                user = User.objects.get(id=req.POST['user'])
+                permissions = req.POST['permissions']
+                
+                g = user.groups.all()
+                if len(g):
+                    g[0].user_set.remove(user)
+                    user.groups.clear()
 
-            if permissions != 'no perms':
-                new_group = Group.objects.get(name=permissions)
-                new_group.user_set.add(user)
-                user.groups.set([new_group])
+                if permissions != 'no perms':
+                    new_group = Group.objects.get(name=permissions)
+                    new_group.user_set.add(user)
+                    user.groups.set([new_group])
 
-            return render(req, 'database_app/admin.html', {
-                "user": req.user,
-                "no_permissions": False,
-                "user_group": req.user.groups.all()[0].name,
-                'form': form,
-                'changed': True, 
-                'changed_user': user.username,
-                'changed_perm': permissions
-            })
-            
+                return render(req, 'database_app/admin.html', {
+                    "user": req.user,
+                    "no_permissions": False,
+                    "user_group": req.user.groups.all()[0].name,
+                    'form': form,
+                    'changed': True, 
+                    'changed_user': user.username,
+                    'changed_perm': permissions
+                })
+                
+        else:
+            form = ChangePermissionsform()
+
+        context = get_base_context(req.user)
+        context.update({"form": form})
+        return render(req, 'database_app/admin.html', context)
     else:
-        form = ChangePermissionsform()
-
-    return render(req, 'database_app/admin.html', {'form': form,
-                                                  'changed': False,
-                                                  "user": req.user, 
-                                                  "user_group": req.user.groups.all()[0].name,
-                                                  "no_permissions": False})
+        return redirect('/')
 
 
 @login_required
 def all_tables(request):
     tables = DataTable.objects.all()
-    context = {
-        "user": request.user,
-        "no_permissions": False,
-        "tables": tables,
-        "user_group": request.user.groups.all()[0].name,
-    }
+    context = get_base_context(request.user)
+    context.update({"tables": tables})
     return render(request, 'database_app/alltables.html', context)
 
-
+@login_required
 def create_table(request):
-    if request.method == "POST":
-        name_table = request.POST["name"]
-        if name_table != "":
-            try:
-                table = DataTable.objects.get(name=name_table)
-                context = {
-                    "form": DataTableForms(),
-                    "error": "Такая таблица уже существует",
-                    "user": request.user,
-                    "no_permissions": False,
-                    "user_group": request.user.groups.all()[0].name,
-                }
-                return render(request, "database_app/createtable.html", context)
+    if request.user.groups.all()[0].name == "admins":
+        context = get_base_context(request.user)
+        if request.method == "POST":
+            name_table = request.POST["name"]
+            if name_table != "":
+                try:
+                    table = DataTable.objects.get(name=name_table)
+                    context.update({
+                        "form": DataTableForms(),
+                        "error": "Такая таблица уже существует"
+                    })
+                    return render(request, "database_app/createtable.html", context)
 
-            except:
-                new_table = DataTable.objects.create(name=name_table)
-                for i in range(2):
-                    if i == 0:
-                        text = "Столбец "
-                    else:
-                        text = "Ячейка "
-                    for j in range(2):
-                        node = DataNode.objects.create(data=text+str(j+1), row_pos=i, column_pos=j)
-                        new_table.nodes.add(node)
-                new_table.save()
-                return redirect("alltables")
+                except:
+                    new_table = DataTable.objects.create(name=name_table)
+                    for i in range(2):
+                        if i == 0:
+                            text = "Столбец "
+                        else:
+                            text = "Ячейка "
+                        for j in range(2):
+                            node = DataNode.objects.create(data=text+str(j+1), row_pos=i, column_pos=j)
+                            new_table.nodes.add(node)
+                    new_table.save()
+                    return redirect("alltables")
+        else:
+            context.update({
+                "form": DataTableForms(),
+                "error": ""
+            })
+            return render(request, "database_app/createtable.html", context)
     else:
-        context = {
-            "form": DataTableForms(),
-            "error": ""
-        }
-        return render(request, "database_app/createtable.html", context)
+        return redirect('/')
 
-
+@login_required
 def delete_table(request):
-    table_id = request.GET.get("table_id")
-    table = DataTable.objects.get(pk=table_id)
-    if request.method == "POST":
-        for node in table.nodes.all():
-            node.delete()
-        table.delete()
-        return redirect("alltables")
+    if request.user.groups.all()[0].name == "admins":
+        context = get_base_context(request.user)
+        table_id = request.GET.get("table_id")
+        table = DataTable.objects.get(pk=table_id)
+        context.update({"table": table})
+        if request.method == "POST":
+            for node in table.nodes.all():
+                node.delete()
+            table.delete()
+            return redirect("alltables")
+        else:
+            return render(request, "database_app/deletetable.html", context)
     else:
-        return render(request, "database_app/deletetable.html", {
-                        "table": table,
-                        "user": request.user,
-                        "no_permissions": False,
-                        "user_group": request.user.groups.all()[0].name,})
+        return redirect("/")
 
 
 
