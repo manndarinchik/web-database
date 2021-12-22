@@ -82,6 +82,10 @@ nav * {
 	border-bottom: 5px solid transparent;
 }
 
+.active {
+    transform: rotate(-90deg);
+}
+
 .content {
 	margin: 0 auto;
     display: flex;
@@ -95,7 +99,7 @@ nav * {
 /* .table-responsive {
 	display: flex;
     max-width: 1280px;
-	
+	margin-bottom: 14px;
     overflow-x: auto !important;
 } */
 
@@ -125,6 +129,11 @@ tr {
 	height: 30px;
     position: relative;
 }
+
+.table {
+    margin-bottom: 0 !important;
+}
+
 td {
 	height: 30px;
 	min-width: 100px;
