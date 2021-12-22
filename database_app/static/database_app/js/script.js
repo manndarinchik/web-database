@@ -222,24 +222,25 @@ function buttons() {
     const choiceButton = document.createElement("button");
     choiceButton.classList.add('choiceButton', 'btn', 'btn-primary');
     choiceButton.setAttribute("type", "button");
+    choiceButton.style.padding = '0';
     
     const addButton = document.createElement("button");
     addButton.classList.add('btn', 'btn-success');
     addButton.setAttribute("type", "button");
+    addButton.style.padding = '0';
     addButton.innerHTML = "+"
     addButton.style.display = "none";
 
     const deleteButton = document.createElement("button");
     deleteButton.classList.add( 'btn', 'btn-danger');
     deleteButton.setAttribute("type", "button");
-    addButton.innerHTML = "-"
+    deleteButton.style.padding = '0';
+    deleteButton.innerHTML = "-"
     deleteButton.style.display = "none";
 
     buttonWrapper.append(addButton, choiceButton, deleteButton);
     
     buttonWrapper.classList.add("choiceButton__wrapper")
-    buttonWrapper.style.width = `${buttonWidth}px`;
-    buttonWrapper.style.height = `${buttonHeight}px`
     return buttonWrapper
 }
 
@@ -277,6 +278,7 @@ function dualButton(wrapper) {
     wrapper.childNodes[0].classList.toggle("addButton");
     wrapper.childNodes[0].setAttribute("id", wrapper.classList[1]);
     wrapper.childNodes[0].setAttribute("onclick", "show(this)");
+    wrapper.childNodes[1].classList.toggle("hide");
     wrapper.childNodes[2].classList.toggle("deleteButton");
     wrapper.childNodes[2].setAttribute("id", wrapper.classList[1] + "Delete");
     wrapper.childNodes[2].setAttribute("onclick", "deleteRC(this)");
@@ -311,6 +313,7 @@ function deleteRC(obj) {
             deleteTB("bottom");
             break;
     }
+    deleteStyles();
 }
 
 function show(obj) {
@@ -348,6 +351,7 @@ function show(obj) {
             showTB("bottom");
             break;
     }
+    deleteStyles();
 }
 
 function makeButtons(xCords, yCords, obj, xPos, yPos) {
@@ -364,6 +368,7 @@ function makeButtons(xCords, yCords, obj, xPos, yPos) {
     const x = [xCords + 15, xCords - buttonWidth - 15, xCords - buttonWidth / 2, xCords - buttonWidth / 2];
     const y = [yCords - buttonHeight / 2, yCords - buttonHeight / 2, yCords - buttonHeight - 15, yCords + 15];
     const pos = ["right", "left", "top", "bottom"];
+    const rotation = ["270deg", "90deg", "180deg", "V"]
     for (let i = 0; i < 4; i++) {
         
         let button = buttons();
@@ -371,6 +376,8 @@ function makeButtons(xCords, yCords, obj, xPos, yPos) {
         button.style.top = `${y[i]}px`;
         button.classList.add(pos[i]);
         button.setAttribute("onclick", "dualButton(this)");
+        button.childNodes[1].innerHTML = "V"
+        button.childNodes[1].style.rotate = rotation[i] ;
         button.style.zIndex = '1000';
         obj.append(button);
 
