@@ -128,9 +128,9 @@ const buttonChange = document.getElementById("button_change");
 let access = 0;
 buttonChange.addEventListener('click', function() {
     if (access % 2 == 0 && squareAccess == 0) {
-        buttonChange.innerHTML = "Выйти";
+        buttonChange.innerHTML = "Отмена";
         document.getElementById("justButton").style.display = 'block';
-        document.getElementById("resetButton").style.display = 'block';
+        // document.getElementById("resetButton").style.display = 'block';
         access += 1;
         let allTr = document.querySelectorAll('tr');
         for (let i = 0; i < allTr.length; i++) {
@@ -152,7 +152,7 @@ buttonChange.addEventListener('click', function() {
         }
     } else if (squareAccess == 0) {
         document.getElementById("justButton").style.display = 'none';
-        document.getElementById("resetButton").style.display = 'none';
+        // document.getElementById("resetButton").style.display = 'none';
         buttonChange.innerHTML = "Изменить"
         access -= 1;
         let allTr = document.querySelectorAll('tr');
@@ -174,8 +174,8 @@ buttonChange.addEventListener('click', function() {
 
 /*-----------Кнопка "отмена"-----------*/
 
-let resetButton = document.getElementById("resetButton");
-resetButton.addEventListener('click', ResetTable);
+// let resetButton = document.getElementById("resetButton");
+// resetButton.addEventListener('click', ResetTable);
 
 function ResetTable(){
     let newTr = document.querySelectorAll("tr");

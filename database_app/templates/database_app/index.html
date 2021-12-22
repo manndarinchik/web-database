@@ -5,7 +5,7 @@
     {% if perms.database_app.can_view %}
     <div class="card" style="margin-top: 2rem; width: 100%;" id="table_card">
         <div class="card-header" id="table_header">
-            <h1>Таблица: {{name}}</h1>
+            <h3>Таблица: {{name}}</h3>
         </div>
 
         <div class="card-body">
@@ -38,12 +38,15 @@
                 </div> {% endcomment %}
         
                 {% if perms.database_app.can_edit %}
-                <div class="d-flex flex-row">
+                <div class="d-flex flex-row bottom-button-container">
                     <div class="btn btn-warning" id="button_change" style="display: inline-block;">Изменить</div>
-                    <div class="btn btn-secondary" id="resetButton" style="display: none;">Отменить изменения</div>
+                    {% comment %} <div class="btn btn-secondary" id="resetButton" style="display: none;">Отменить изменения</div> {% endcomment %}
                     <button class="btn btn-primary" id="justButton"    style="display: none;">Сохранить изменения</button>
                     <input type="text" class='agent' name="agent">
+                    
+                    {% if user_group == "admins" %}
                     <a href="{% url 'deletetable' %}?table_id={{id}}" class="btn btn-danger" style="display: inline-block;">Удалить таблицу</a>
+                    {%endif%}
                 </div>
 
                 {% endif %}

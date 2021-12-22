@@ -226,7 +226,10 @@ def create_table(request):
                 table = DataTable.objects.get(name=name_table)
                 context = {
                     "form": DataTableForms(),
-                    "error": "Такая таблица уже существует"
+                    "error": "Такая таблица уже существует",
+                    "user": request.user,
+                    "no_permissions": False,
+                    "user_group": request.user.groups.all()[0].name,
                 }
                 return render(request, "database_app/createtable.html", context)
 
@@ -259,7 +262,11 @@ def delete_table(request):
         table.delete()
         return redirect("alltables")
     else:
-        return render(request, "database_app/deletetable.html", {"table": table})
+        return render(request, "database_app/deletetable.html", {
+                        "table": table,
+                        "user": request.user,
+                        "no_permissions": False,
+                        "user_group": request.user.groups.all()[0].name,})
 
 
 

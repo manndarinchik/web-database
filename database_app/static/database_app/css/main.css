@@ -231,6 +231,8 @@ td:nth-child(2) {
 	padding: 0;
 }
 
-.list-group-container{
+.bottom-button-container{
 	margin: 1rem;
+	display: flex;
+	flex-direction: row;
 }

@@ -11,7 +11,7 @@
       {% csrf_token %}
       {% for field in form %}
         <div class="input-group mb-3">
-          {{ field.label_tag }}
+          <div class="input-group-text">{{ field.label_tag }}</div>
           <div class="form-control">{{ field }}</div>
         </div>
           {% if field.help_text %}
@@ -22,7 +22,8 @@
           {% endfor %}
         </p>
       {% endfor %}
-      <button class="btn btn-outline-primary me-2" type="submit">Зарегистрироваться</button>
+      <button class="btn btn-success me-2" type="submit">Зарегистрироваться</button>
+      <a class="btn btn-warning me-2" href="{% url 'login' %}">Вернуться</a>
     </form>
   </div>
 </div>

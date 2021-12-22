@@ -12,7 +12,7 @@
                     <p><b>Пользователь: </b>{{ form.user }}</p>
                     <p><b>Уровень доступа: </b>{{ form.permissions }}</p>
                     <input class="btn btn-primary" type="submit" value="Подтвердить">
-                    <a class="btn btn-danger" href="{% url 'index' %}">На главную</a>
+                    <a class="btn btn-danger" href="{% url 'alltables' %}">На главную</a>
                 </div>
                 
                 {% if changed %}
